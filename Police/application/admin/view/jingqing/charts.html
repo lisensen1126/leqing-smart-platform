@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>乐清市警保联动智慧平台</title>
+		
+		<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+	
+		<script src="/js/my.js"></script>
+
+
+		
+<!-- 		<script type="text/javascript" src="/js/echarts.min.js"></script>
+		<script type="text/javascript" src="/js/countUp.min.js"></script> -->
+		<!-- <script type="text/javascript" src="/js/echarts-map-china.js"></script> -->
+		<!-- <script type="text/javascript" src="/js/echarts-theme-shine.js"></script> -->
+	</head>
+	
+	<body style="height: 100%;">
+		
+		<link rel="stylesheet" href="/css/amazeui.min.css"/>
+		<link rel="stylesheet" href="/css/admin.css">
+		<link rel="stylesheet" type="text/css" href="/css/app2.css" />
+		<header id="header">
+			<h3 class="header-title">乐清市警保联动智慧平台</h3>
+			<div class="header-info header-info-l"><a class=" xuanfubtn"  target="_blank" href="map?ref=addtabs">进入平台</a></div>
+			<div class="header-info header-info-r">数据日期：<span id="nowDate"></span></div>
+		</header>		
+		<!-- <footer id="footer"></footer>		 -->
+		<div id="container2"  id="bodyy"  style="height: 800px;">
+<!-- <script type="text/javascript">
+			$("div").height(1);
+			alert($(document).height());
+		</script> -->
+			<div id="flexCon">
+				<div class="flex-row">
+					<div class="flex-cell flex-cell-l">
+						<div class="chart-wrapper">
+							<h3 class="chart-title">警情趋势</h3>
+							<div class="chart-div" id="rankChart">
+								<div class="chart-loader"  style="height: 400px;"><div class="loader" style="height: 400px;"></div></div>
+							</div>
+						</div>
+					</div>
+					<div class="flex-cell flex-cell-c" style="padding-right:0;">
+						<div class="chart-wrapper">
+							<h3 class="chart-title">统计数据</h3>
+							<div class="chart-div chart-done">
+								<table class="data-t" style="height: auto;">
+									<tr>
+										<th><img src="/img/icon-01.png" /></th>
+										<td>
+											<p><span id="total">50</span></p>
+											<p>在线人数</p>
+										</td>
+										<th><img src="/img/icon-02.png" /></th>
+										<td>
+											<p><span id="jingcha">25</span></p>
+											<p>民警</p>
+										</td>
+										<th><img src="/img/icon-07.png" /></th>
+										<td>
+											<p><span id="baoan">25</span></p>
+											<p>保安</p>
+										</td>
+									</tr>
+									
+								
+								</table>
+								<div  class="am-g" style="color: white;">
+										<div class="am-u-sm-4">
+											<div id="main1" style="width: 150px;height: 150px;"></div>
+											<p style="margin-top: -30px;">总人数在线比</p>
+										</div>
+										<div class="am-u-sm-4">
+											<div id="main2" style="width: 150px;height: 150px;"></div>
+											<p style="margin-top: -30px;">警察在线比</p>
+										</div>
+										<div class="am-u-sm-4">
+											<div id="main3" style="width: 150px;height: 150px;"></div>
+											<p style="margin-top: -30px;">保安在线比</p>
+										</div>
+										
+									</div>
+							</div>
+						</div>
+					</div>
+					<div class="flex-cell flex-cell-l">
+						<div class="chart-wrapper">
+							<h3 class="chart-title">调度趋势</h3>
+							<div class="chart-div" id="rankChart2">
+								<div class="chart-loader"><div class="loader"></div></div>
+							</div>
+						</div>	
+					</div>
+					
+				</div>
+				<div class="flex-row">
+					<div class="flex-cell flex-cell-l" style="padding-bottom:0;">
+						<div class="chart-wrapper">
+							<h3 class="chart-title">信息分布走势</h3>
+							<div class="chart-div" id="trendChart" style="height: 300px;">
+								<div class="chart-loader"><div class="loader"></div></div>
+							</div>
+						</div>
+					</div>
+					<div class="flex-cell flex-cell-c" style="padding-left:0;">
+						<div class="chart-wrapper am-u-sm-8">
+							<h3 class="chart-title">地域分布</h3>
+							<div style="width: 300px;height: 400px;">
+								<img src="/img/map.png" style="width: 100%;height: 100%;margin-left: 150px;margin-top: -40px;">
+							</div>
+							
+						</div>
+						<div class="chart-wrapper am-u-sm-4">
+						<table style="color: gray; font-size: 12px;" id="paichusuolist">
+							</table>
+						</div>
+					</div>
+					<div class="flex-cell flex-cell-r" style="padding-bottom:0;">
+						<div class="chart-wrapper">
+							<h3 class="chart-title">类型占比</h3>
+							<div class="chart-div" id="csrcChart">
+								<div class="chart-loader"><div class="loader"></div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+	<script type="text/javascript" src="/js/echarts.min.js"></script>
+	<script type="text/javascript" src="/js/echarts-map-china.js"></script>
+	<script type="text/javascript" src="/js/echarts-theme-shine.js"></script>
+	<script type="text/javascript" src="/js/countUp.min.js"></script>
+
+<script type="text/javascript">
+
+	
+var int=self.setInterval("clock()",5000);
+function clock()
+{
+	getPeople();
+	getJingqing();
+	getDiaodu();
+	getPaichusuo();
+	getWeifa1();
+	getWeifa2();
+}
+function guage(a,b){
+	var chartDom = document.getElementById(a);
+var myChart = echarts.init(chartDom);
+var option;
+
+option = {
+  series: [
+    {
+      type: 'gauge',
+      startAngle: 180,
+      endAngle: 0,
+      min: 0,
+      max: 1,
+      splitNumber: 8,
+      axisLine: {
+        lineStyle: {
+          width: 6,
+          color: [
+            [0.25, '#FF6E76'],
+            [0.5, '#FDDD60'],
+            [0.75, '#58D9F9'],
+            [1, '#7CFFB2']
+          ]
+        }
+      },
+      pointer: {
+        length: '80%',
+        width: 2,
+        offsetCenter: [0, '-60%'],
+        itemStyle: {
+          color: 'auto'
+        }
+      },
+      axisTick: {
+        length: 12,
+        lineStyle: {
+          color: 'auto',
+          width: 2
+        }
+      },
+      splitLine: {
+        length: 20,
+        lineStyle: {
+          color: 'auto',
+          width: 5
+        }
+      },
+      axisLabel: {
+        color: '#464646',
+        fontSize: 0,
+        distance: -60,
+        formatter: function (value) {
+          if (value === 0.875) {
+            return 'A';
+          } else if (value === 0.625) {
+            return 'B';
+          } else if (value === 0.375) {
+            return 'C';
+          } else if (value === 0.125) {
+            return 'D';
+          }
+          return '';
+        }
+      },
+      title: {
+        offsetCenter: [0, '-20%'],
+        fontSize: 30
+      },
+      detail: {
+        fontSize: 20,
+        offsetCenter: [0, '0%'],
+        valueAnimation: true,
+        formatter: function (value) {
+          return Math.round(value * 100) + '%';
+        },
+        color: 'auto'
+      },
+      data: [
+        {
+          value: b,
+          name: '',
+          fontSize: 20
+        }
+      ]
+    }
+  ]
+};
+option && myChart.setOption(option);
+}
+
+function getPeople(){
+	//获取人数			
+    $.ajax({
+    	url: "/Api/Data/Users",
+    	dataType: "json"
+    }).done(function(data) {
+    	console.log('Data: ', data);
+    	$("#total").text(data.totalOnline+"/"+data.total);
+    	$("#jingcha").text(data.jingchaOnline+"/"+data.jingcha);
+    	$("#baoan").text(data.baoanOnline+"/"+data.baoan);
+    	guage("main1",data.totalbili);
+    	guage("main2",data.jingchabili);
+    	guage("main3",data.baoanbili);
+    }).fail(function(jqXHR) {
+    	console.log("Ajax Fail: ", jqXHR.status, jqXHR.statusText);
+    });
+}
+function getPaichusuo(){
+	//获取派出所统计			
+$.ajax({
+	url: "/Api/Data/Paichusuo",
+	dataType: "json"
+}).done(function(data) {
+	console.log('Data: ', data);
+	$("#paichusuolist").empty();
+	for(j = 0; j < data.length; j++) {
+	 	$("#paichusuolist").append("<tr><td>"+data[j]["name"]+"</td><td>"+data[j]["num"]+"</td></tr>");  
+	} 
+	
+
+}).fail(function(jqXHR) {
+	console.log("Ajax Fail: ", jqXHR.status, jqXHR.statusText);
+});
+}
+
+
+
+
+</script>	
+<script type="text/javascript">
+// 	$(function() {
+		//获取当天日期
+		(function() {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = now.getMonth()+1;
+			const day = now.getDate();
+			$("#nowDate").html(year+"年"+month+"月"+day+"日");
+		})();
+		
+		//获取统计数据
+		$.ajax({
+			url: "/data/count-data.json",
+			dataType: "json"
+		}).done(function(data) {
+			//console.log('Data: ', data);
+			// rollNum("listedCompany", 0, data.listed_companies_total);
+			// rollNum("listedSecurity", 0, data.listed_securities_total);
+			// rollNum("totalMarket", 0, data.total_market_value);
+			// rollNum("circulationMarket", 0, data.circulation_market_value, 2);
+			// rollNum("shRatio", 0, data.sh_pe_ratio, 2);
+			// rollNum("szRatio", 0, data.sz_pe_ratio, 2);
+		}).fail(function(jqXHR, textStatus) {
+			console.log("Ajax Error: ", textStatus);
+		});
+		
+		//获取排行数据
+		const rankChart = echarts.init(document.getElementById("rankChart"), "shine");
+		const rankChartOpt = {
+			tooltip: {
+				trigger: "axis",
+				axisPointer: {
+					type: "shadow"
+				},
+				formatter: function(params) {
+					const param = params[0];
+					const marker = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#e6b600;"></span>';
+					const suffix = '<span style="margin-left:5px;font-size:12px;"></span>';
+					return param.name + "<br />" +
+						marker + "警情：" + param.value + suffix;
+				}
+			},
+			grid: {
+				top: 10,
+				bottom: 40,
+				left: 60
+			},
+			xAxis: {
+				type: 'category',
+				data: ['01-01', '01-02', '01-03', '01-04', '01-05', '01-06'],
+				axisLabel: {
+					fontSize: 12,
+					color: "#b0c2f9"
+				}
+			},
+			yAxis: {
+				type: "value",
+				axisLine: {show: true},
+				axisTick: {show: true},
+				axisLabel: {
+					fontSize: 12,
+					color: "#b0c2f9"
+				}
+			},
+			series: [{
+				name: "警情",
+				type: "bar",
+				barCategoryGap: "60%",
+				label: {
+					show: true,
+					position: "right",
+					fontSize: 12,
+					color: "#188df0",
+					emphasis: {
+						color: "#e6b600"
+					}
+				},
+				itemStyle: {
+	                normal: {
+	                    color: new echarts.graphic.LinearGradient(
+	                        0, 1, 1, 1,
+	                        [
+	                            {offset: 0, color: '#b0c2f9'},
+	                            {offset: 0.5, color: '#188df0'},
+	                            {offset: 1, color: '#185bff'}
+	                        ]
+	                    )
+	                },
+	                emphasis: {
+	                    color: new echarts.graphic.LinearGradient(
+	                        0, 1, 1, 1,
+	                        [
+	                            {offset: 0, color: '#b0c2f9'},
+	                            {offset: 0.7, color: '#e6b600'},
+	                            {offset: 1, color: '#ceac09'}
+	                        ]
+	                    )
+	                }
+	            }
+			}]
+		};
+		rankChart.setOption(rankChartOpt);
+		function getJingqing(){
+			$.ajax({
+			// url: "/data/ranking-list.json",
+			url: "/Api/Data/Jingqing",
+			dataType: "json"
+		}).done(function() {
+			$("#rankChart").addClass("chart-done");
+		}).done(function(data) {
+			//console.log('Data: ', data);
+			const xData = [];
+			const yData = [];
+			for(let i in data) {
+				xData.push(data[i].market_capitalization);
+				yData.push(data[i].stock_name);
+			}
+			rankChart.setOption({
+				xAxis: {
+					data: yData
+				},
+				yAxis: {
+					data: yData
+				},
+				series: [{
+					name: "举报排行",
+					data: xData
+				}]
+			});
+		}).fail(function(jqXHR) {
+			console.log("Ajax Fail: ", jqXHR.status, jqXHR.statusText);
+		});
+		}
+		//获取排行数据
+		const rankChart2 = echarts.init(document.getElementById("rankChart2"), "shine");
+		const rankChartOpt2 = {
+			tooltip: {
+				trigger: "axis",
+				axisPointer: {
+					type: "shadow"
+				},
+				formatter: function(params) {
+					const param = params[0];
+					const marker = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#e6b600;"></span>';
+					const suffix = '<span style="margin-left:5px;font-size:12px;"></span>';
+					return param.name + "<br />" +
+						marker + "警情：" + param.value + suffix;
+				}
+			},
+			grid: {
+				top: 10,
+				bottom: 40,
+				left: 60
+			},
+			xAxis: {
+				type: 'category',
+				data: ['01-01', '01-02', '01-03', '01-04', '01-05', '01-06'],
+				axisLabel: {
+					fontSize: 12,
+					color: "#b0c2f9"
+				}
+			},
+			yAxis: {
+				type: "value",
+				axisLine: {show: true},
+				axisTick: {show: true},
+				axisLabel: {
+					fontSize: 12,
+					color: "#b0c2f9"
+				}
+			},
+			series: [{
+				name: "警情",
+				type: "bar",
+				barCategoryGap: "60%",
+				label: {
+					show: true,
+					position: "right",
+					fontSize: 12,
+					color: "#188df0",
+					emphasis: {
+						color: "#e6b600"
+					}
+				},
+				itemStyle: {
+	                normal: {
+	                    color: new echarts.graphic.LinearGradient(
+	                        0, 1, 1, 1,
+	                        [
+	                            {offset: 0, color: '#b0c2f9'},
+	                            {offset: 0.5, color: '#188df0'},
+	                            {offset: 1, color: '#185bff'}
+	                        ]
+	                    )
+	                },
+	                emphasis: {
+	                    color: new echarts.graphic.LinearGradient(
+	                        0, 1, 1, 1,
+	                        [
+	                            {offset: 0, color: '#b0c2f9'},
+	                            {offset: 0.7, color: '#e6b600'},
+	                            {offset: 1, color: '#ceac09'}
+	                        ]
+	                    )
+	                }
+	            }
+			}]
+		};
+		rankChart2.setOption(rankChartOpt2);
+		function getDiaodu(){
+			$.ajax({
+			url: "/Api/Data/Diaodu",
+			dataType: "json"
+		}).done(function() {
+			$("#rankChart2").addClass("chart-done");
+		}).done(function(data) {
+			//console.log('Data: ', data);
+			const xData = [];
+			const yData = [];
+			for(let i in data) {
+				xData.push(data[i].market_capitalization);
+				yData.push(data[i].stock_name);
+			}
+			rankChart2.setOption({
+				xAxis: {
+					data: yData
+				},
+				yAxis: {
+					data: yData
+				},
+				series: [{
+					name: "举报排行",
+					data: xData
+				}]
+			});
+		}).fail(function(jqXHR) {
+			console.log("Ajax Fail: ", jqXHR.status, jqXHR.statusText);
+		});
+		}
+		
+		//获取地域分布数据
+		// const mapChart = echarts.init(document.getElementById("mapChart"), "shine");
+		// const mapChartOpt = {
+		// 	tooltip: {
+		// 		formatter: function(params) {
+		// 			const data = params.data;
+		// 			return data.name + "<br />上市公司数：" + data.value;
+		// 		}
+		// 	},
+		// 	visualMap: {
+		// 		type: "piecewise",
+		// 		splitNumber: 6,
+		// 		itemWidth: 10,
+		// 		itemHeight: 10,
+		// 		itemGap: 5,
+		// 		textGap: 5,
+		// 		textStyle: {
+		// 			fontSize: 10,
+		// 			color: "#b0c2f9"
+		// 		},
+		// 		min: 0,
+		// 		max: 600,
+		// 		calculable: true,
+		// 		seriesIndex: [0]
+		// 	},
+		// 	geo: {
+		// 		map: "china",
+		// 		roam: true, //开启鼠标缩放和漫游
+		// 		zoom: 1, //地图缩放级别
+		// 		selectedMode: "single",
+		// 		top: 10,
+		// 		bottom: 10,
+		// 		layoutCenter: ["50%", "50%"],
+		// 		//layoutSize: "100%", //保持地图宽高比
+		// 		label: {
+		// 			show: true,
+		// 			fontSize: 10,
+		// 			color: "#ceac09"
+		// 		}
+		// 	},
+		// 	series: [{
+		// 		name: "地域分布",
+		// 		type: "map",
+		// 		geoIndex: 0
+		// 	}]
+		// };
+		// mapChart.setOption(mapChartOpt);
+		// $.ajax({
+		// 	url: "/data/region-count.json",
+		// 	dataType: "json"
+		// }).done(function() {
+		// 	$("#mapChart").addClass("chart-done");
+		// }).done(function(data) {
+		// 	//console.log('Data: ', data);
+		// 	const chartData = [];
+		// 	for(let i in data) {
+		// 		chartData.push({
+		// 			name: data[i].region,
+		// 			value: data[i].count
+		// 		});
+		// 	}
+		// 	mapChart.setOption({
+		// 		series: [{
+		// 			name: "地域分布",
+		// 			data: chartData
+		// 		}]
+		// 	});
+		// }).fail(function(jqXHR) {
+		// 	console.log("Ajax Fail: ", jqXHR.status, jqXHR.statusText);
+		// });
+		
+		
+		//获取CSRC行业分类数据
+		const csrcChart = echarts.init(document.getElementById("csrcChart"), "shine");
+		const csrcChartOpt = {
+			tooltip: {
+				trigger: "item",
+				formatter: "{b0}<br />数量：{c0}<br />占比：{d0}%"
+			},
+			legend: {
+				type: "scroll",
+				orient: "vertical",
+				padding: 0,
+				top: 15,
+				right: 0,
+				itemGap: 5,
+				itemWidth: 10,
+				itemHeight: 10,
+				textStyle: {
+					fontSize: 10,
+					color: "#b0c2f9"
+				}
+			},
+			series: [{
+				name: "",
+				type: "pie",
+				center: ["47%", "55%"],
+				radius: ["30%", "85%"]
+			}]
+		};
+		csrcChart.setOption(csrcChartOpt);
+		
+		function getWeifa2(){
+			$.ajax({
+			// url: "/data/csrc-industry.json",
+			url: "/Api/Data/Type",
+			dataType: "json"
+		}).done(function() {
+			$("#csrcChart").addClass("chart-done");
+		}).done(function(data) {
+			//console.log('Data: ', data);
+			const chartData = [];
+			for(let i in data) {
+				chartData.push({
+					name: data[i].name,
+					value: data[i].num
+				});
+			}
+			csrcChart.setOption({
+				series: [{
+					name: "CSRC行业分类",
+					data: chartData
+				}]
+			});
+		}).fail(function(jqXHR) {
+			console.log("Ajax Fail: ", jqXHR.status, jqXHR.statusText);
+		});
+		}
+		
+		//获取月度股票情况数据
+		const trendChart = echarts.init(document.getElementById("trendChart"), "shine");
+		const trendChartOpt = {
+			tooltip: {
+				trigger: "axis",
+				axisPointer: {
+					type: "none"
+				}
+			},
+			legend: {
+				left: "center",
+				bottom: 3,
+				itemWidth: 15,
+				itemHeight: 10,
+				textStyle: {
+					fontSize: 12,
+					color: "#b0c2f9"
+				},
+				data: ["人员", "车辆", "违法"]
+			},
+			grid: {
+				top: 40,
+				bottom: 50,
+				left: 60,
+				right: 60
+			},
+			xAxis: {
+				type: "category",
+				axisLine: {
+					lineStyle: {color: "#b0c2f9"}
+				},
+				axisTick: {show: false},
+				axisLabel: {
+					fontSize: 12,
+					color: "#b0c2f9"
+				}
+			},
+			yAxis: [{
+				name: "数量",
+				type: "value",
+				splitNumber: 5,
+				axisLine: {
+					lineStyle: {color: "#b0c2f9"}
+				},
+				splitLine: {show: false},
+				axisTick: {color: "#b0c2f9"},
+				axisLabel: {
+					fontSize: 12,
+					color: "#b0c2f9",
+					formatter: (value, index) => {
+						return parseInt(value ) + "条";
+					}
+				}
+			}, {
+				name: "",
+				type: "value",
+				splitNumber: 5,
+				maxInterval: 5,
+				minInterval: 5,
+				interval: 5,
+				axisLine: {
+					lineStyle: {color: "#b0c2f9"}
+				},
+				splitLine: {show: false},
+				axisTick: {color: "#b0c2f9"},
+				axisLabel: {
+					fontSize: 12,
+					color: "#b0c2f9"
+				}
+			}],
+			visualMap: {
+		        show: false,
+		        seriesIndex: 2,
+		        dimension: 0,
+		        pieces: [{
+		            lte: 9,
+		            color: "rgba(176, 58, 91, 1)"
+		        }, {
+		            gt: 9,
+		            lte: 11,
+		            color: "rgba(176, 58, 91, 0.5)"
+		        }]
+		    },
+			series: [{
+				name: "人员",
+				type: "pictorialBar",
+				symbol: 'path://d="M150 50 L130 130 L170 130  Z"',
+				barCategoryGap: "40%",
+				itemStyle: {
+					color: function(params) {
+						if(params.dataIndex >= 10) {
+							return "rgba(119, 96, 246, 0.5)";
+						}
+						return "rgba(119, 96, 246, 1)";
+					}
+				},
+				markPoint: {
+					itemStyle: {
+						color: "rgba(119, 96, 246, 1)"
+					},
+					data: [{
+						name: "最大值",
+						type: "max"
+					}]
+				},
+				// markLine: {
+				// 	lineStyle: {
+				// 		color: "rgba(119, 96, 246, 1)"
+				// 	},
+				// 	label: {
+				// 		position: "middle",
+				// 		formatter: "月度平均举报：{c}亿元"
+				// 	},
+				// 	data: [{
+				// 		name: "平均值",
+				// 		type: "average"
+				// 	}]
+				// }
+			}, {
+				name: "车辆",
+				type: "pictorialBar",
+				symbol: 'path://d="M150 50 L130 130 L170 130  Z"',
+				barCategoryGap: "40%",
+				itemStyle: {
+					color: function(params) {
+						if(params.dataIndex >= 10) {
+							return "rgba(230, 182, 0, 0.5)";
+						}
+						return "rgba(230, 182, 0, 1)";
+					}
+				},
+				markPoint: {
+					itemStyle: {
+						color: "rgba(230, 182, 0, 1)"
+					},
+					data: [{
+						name: "最大值",
+						type: "max"
+					}]
+				},
+				// markLine: {
+				// 	lineStyle: {
+				// 		color: "rgba(230, 182, 0, 1)"
+				// 	},
+				// 	label: {
+				// 		position: "middle",
+				// 		formatter: "月度平均调度：{c}亿元"
+				// 	},
+				// 	data: [{
+				// 		name: "平均值",
+				// 		type: "average"
+				// 	}]
+				// }
+			}, {
+				name: "违法",
+				type: "line",
+				yAxisIndex: 1
+			}]
+		};
+		trendChart.setOption(trendChartOpt);
+		function getWeifa1(){
+			$.ajax({
+			url: "/Api/Data/Item",
+			// url: "/data/month-count.json",
+			dataType: "json"
+		}).done(function() {
+			$("#trendChart").addClass("chart-done");
+		}).done(function(data) {
+			//console.log('Data: ', data);
+			const xData = [];
+			const yData1 = [];
+			const yData2 = [];
+			const yData3 = [];
+			for(let i in data) {
+				xData.push(data[i].month);
+				yData1.push(data[i].renyuan);
+				yData2.push(data[i].cheliang);
+				yData3.push(data[i].weifa);
+			}
+			trendChart.setOption({
+				xAxis: {
+					data: xData,
+				},
+				series: [{
+					name: "人员",
+					data: yData1
+				}, {
+					name: "车辆",
+					data: yData2
+				}, {
+					name: "违法",
+					data: yData3
+				}]
+			});
+		}).fail(function(jqXHR) {
+			console.log("Ajax Fail: ", jqXHR.status, jqXHR.statusText);
+		});
+		}
+		
+		
+		
+		//浏览器窗口大小变化时，重置报表大小
+		$(window).resize(function() {
+			rankChart.resize();
+			// mapChart.resize();
+			trendChart.resize();
+			csrcChart.resize();
+		});
+// 	});
+	
+	//数字变化特效
+	function rollNum(elId, startVal, endVal, decimalNum) {
+		let n = decimalNum || 0;
+		let countUp = new CountUp(elId, startVal, endVal, n, 2.5, {
+			useEasing: true, 
+			useGrouping: true, 
+			separator: ',', 
+			decimal: '.'
+		});
+		if(!countUp.error) {
+		    countUp.start();
+		}else {
+		    console.error(countUp.error);
+		}
+	}
+</script>
+	</body>
+
+</html>

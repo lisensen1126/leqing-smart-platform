@@ -1,0 +1,189 @@
+<link rel="stylesheet" href="/Public/css/layui.css">
+<link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+<link rel="stylesheet" href="/Public/css/amazeui.min.css"/>
+<link rel="stylesheet" href="/Public/css/admin.css">
+<link rel="stylesheet" href="/Public/css/my.css">
+<script type="text/javascript" src="/Public/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/Public/myplugs/js/plugs.js"></script>
+<script src="/Public/js/amazeui.min.js"></script>
+<script src="/Public/js/app.js"></script>
+<script src="/Public/js/layui.js"></script>
+<script src="/Public/js/my.js"></script>
+
+
+<!-- content start -->
+<div class="admin-content" style="overflow-y: hidden;height: 100%;" id="main">
+  <div class="am-u-sm-12" style="height: 100%;padding: 0px;">
+   <!--  <div class="am-cf am-padding am-padding-bottom-0">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">{$item}管理</strong> / <small> {$item}列表</small></div>
+    </div> -->
+
+
+    
+<!--  <hr> -->
+    <div  style="height: 100%;">
+      <div class="am-u-sm-12"  style="height: 100%">
+        <!-- <div id="container" style="width: 80%;height: 50rem;"  ></div> -->
+        <div id="container" style="width: 100%; height: 100%;" class="map" ></div>
+        <div id="panel"></div>
+        <div class=" am-icon-list xuanfubtn" onclick="quanping()"></div>
+
+
+        
+        <!-- 警情表 -->
+        <div class="am-panel am-panel-default xuanfuleft" >
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}" style="background-color: #3368C4;color: white;">警情列表<span class="am-icon-chevron-down am-fr" ></span></div>
+          <div class="am-panel-bd am-collapse " id="collapse-panel-2" style="padding: 0px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 300px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-u-sm-12 font8"  style="height: 100px;padding: 2px;">
+                  <div class="am-u-sm-6 ">
+                    <div class="am-form-group">
+                      <input  type="checkbox" id="jingqingmapin" name="地图内搜索" value="地图内搜索">地图内搜索
+                    </div>
+                  </div>
+                  <div class="am-u-sm-6 ">
+                    <div class="am-form-group">
+                      <select name="type" id="jingqingtype1" style="font-size: 8px; height: 35px;" >
+                        <option value="">所有类别</option>
+                        <option value="警情联动">警情联动</option>
+                        <option value="调度指令">调度指令</option>
+                      </select>
+                    </div>
+                  </div>                  
+                  <div class="am-u-sm-12 font8">
+                    <div class="am-input-group am-input-group-sm">
+                      <input type="text" name="realname" id="jingqingtitle" class="am-form-field" placeholder="标题">
+                    <span class="am-input-group-btn ">
+                      <button class="am-btn am-btn-default" onclick="getJingqing()" type="button">搜索</button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="am-tabs-bd" >
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table class="am-table font8">
+                      <!-- <table class="am-table am-table-striped am-table-hover table-main"> -->
+                      <thead>
+                      <tr>
+                        <th class="table-title" id="th1">标题</th>
+                        <th class="table-type" id="th2">内容</th>
+                        <th class="table-type" id="th2">时间</th>
+                      </tr>
+                      </thead>
+                      <tbody id="jingqinglist">
+                      <!--   <volist name="jingqinglist" id="vo">
+                        <tr>
+                          <td>{$vo.title}</td>
+                          <td>{$vo.address}</td>                              
+                          <td>{$vo.timeadd}</td>                              
+                        </tr>              
+                      </volist> -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 警情表 -->
+        <!-- 警情详情 -->
+        <div class="am-panel am-panel-default xuanfujingqing" id="jingqinginfo" style="display: none;">
+          <div class="am-panel-hd am-cf"  style="background-color: #3368C4;color: white;" >警情详情<span class="am-icon-close am-fr" onclick="jingqinginfoHide()" ></span></div>
+          <div class="am-panel-bd " style="padding: 0px;">
+            <div class="am-panel am-panel-default">
+              <div class="am-panel-bd">
+                <div class="am-g">
+                  <div class="am-u-md-6" style="margin: 5px;">
+                    <p style="margin: 5px;">报警时间：<span id="jingqinginfotime">2021-12-16 08：00：00</span></p>
+                    <p style="margin: 5px;">发布人：<span id="jingqinginfoname">王先生(15234762345)</span></p>
+                    <p style="margin: 5px;">案发地点：<span></span></p>
+                    <textarea style="width: 100%;" rows="1"  id="jingqinginfoaddress">温州市乐清市哒哒哒街呃呃呃号</textarea>
+                    <p style="margin: 5px;">警情内容：</p>
+                    <textarea style="width: 100%;" rows="4" id="jingqinginfocontent"></textarea>
+                    <p style="margin: 5px;">类型：<span id="jingqinginfotype4">失物类</span></p>
+                    <p style="margin: 5px;">状态：<span id="jingqinginfostate">未下达</span></p>
+                  </div>
+                  <div class="am-u-md-5" style="margin: 5px;">
+                    <img id="jingqinginfoimage" style="width: 150px;height: 100px;">
+                    <video  id="jingqinginfovideo"  width="150" height="100" controls>
+                      <source src="/Uploads/2021-12-12/2021-12-12-18-12-58863.mp4" type="video/mp4">
+                    您的浏览器不支持Video标签。
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 警情详情 -->
+        <!-- 个人信息 -->
+        <div class="am-panel am-panel-default xuanfuzhong" style="height: 300px;display: none;" id="userinfo">
+          <div class="am-panel-hd am-cf"  style="background-color: #3368C4;color: white;" >个人信息<span class="am-icon-close am-fr" onclick="userinfoHide()" ></span></div>
+          <div class="am-panel-bd " style="padding: 0px;height: 300px">
+            <div class="am-panel am-panel-default" style="height: 100%">
+              <div class="am-panel-bd">
+                <div class="am-g">
+                  <div class="am-u-md-6">
+                    <img id="userinfoimg" class="am-img-circle am-img-thumbnail"/>
+                  </div>
+                  <div class="am-u-md-6">
+                    <p><span id="userinfoname">王先生</span><a href="#">(<span id="userinfotype">警察</span>)</a></p>
+                    <p>状态：<span id="userinfoonline">在线</span></p>
+                    <p>认证：<span id="userinfoauth">已认证</span></p>
+                    
+                    
+                    
+                  </div>
+                  <p>电话：<span id="userinfophone">15234567890</span></p>
+                    <p>单位：<span id="userinfoorganname1">和西派出所</span>-><span id="userinfoorganname2">人事部</span></p>
+                    
+                    <p>驻地：<span id="userinfoplace">小楼区</span></p><hr>
+                    <button type="button" onclick="userinfoHide()" class="am-btn am-btn-primary am-btn-xs">关闭</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 个人信息 -->
+        
+      </div>
+    </div>
+  </div>
+  <!-- footer start -->
+<!--     <include file="Public/footer" />
+-->    <!-- footer end -->
+  
+
+</div>
+<!-- content end -->
+
+
+  
+  <script type="text/javascript">
+    //添加编辑弹出层
+    function updatePwd(title, id) {
+      $.jq_Panel({
+        title: title,
+        iframeWidth: 500,
+        iframeHeight: 300,
+        url: "updatePwd.html"
+      });
+    }
+  </script>
+  <script src="/Public/js/layui.js"></script>
+  <script>
+    //JavaScript代码区域
+    layui.use('element', function() {
+      var element = layui.element;
+
+    });
+  </script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.MouseTool,AMap.Walking"></script>
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<!--   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.Walking"></script> -->
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>  
+<script type="text/javascript" src="/PUblic/js/jingqing.js"></script>  
+

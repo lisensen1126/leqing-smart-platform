@@ -1,0 +1,215 @@
+<!-- <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-inline" data-toggle="cxselect" data-selects="first,second,third,four">
+        <select  id="c-type_id" class="first form-control" name="group_id" data-url="ajax/group"></select>
+        <select  id="c-organ_id" class="second form-control" name="organ_id" data-url="ajax/organ" data-query-name="type_id"></select>
+        <select  id="c-depart_id" class="third form-control" name="depart_id" data-url="ajax/depart" data-query-name="organ_id"></select>
+        <select  id="c-user_id" class="four form-control" name="user_id" data-url="ajax/user" data-query-name="depart_id"></select>
+    </div>
+    <input type="text" name="renwu_id" value="{$renwu_id}">
+    
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>
+ -->
+ <link rel="stylesheet" href="/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/css/admin.css">
+   <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+ var   selectedUserDic= Array();
+    //增加派送人员
+function addPaisongUser(){
+  var userid = $("#jingqingusers").val();
+  var username = $("#jingqingusers").find("option:selected").text();
+  // console.log(userid);
+  // console.log(username);
+  if(userid>0){
+    selectedUserDic[userid]=username;
+    showSelectedUser();
+  }  
+}
+//增加派送机构人员
+function addPaisongOrgan(){
+  var organname1 = $("#jingqingorganname1").val();
+  var organname2 = $("#jingqingorganname2").val();
+
+  if(organname2){
+    url = "/Api/User/Organ2?depart_id="+organname2;
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      for (var i = 0;i<result.length;i++) {
+        value = result[i];
+        selectedUserDic[value['id']]=value['nickname'];
+      }
+      showSelectedUser(); 
+    });
+  }else{
+    url = "/Api/User/Organ1?organ_id="+organname1;
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      for (var i = 0;i<result.length;i++) {
+        value = result[i];
+        selectedUserDic[value['id']]=value['nickname'];
+      }
+      showSelectedUser(); 
+    });
+  }
+  // console.log(userid);
+  // console.log(username);
+  
+   
+}
+//清空派送人员
+function clearPaisongUser(){
+  selectedUserDic=new Array();
+  showSelectedUser();  
+}
+//删除派送人员
+function deleteSelectedUser(id){
+  delete selectedUserDic[id];
+  showSelectedUser();  
+}
+
+//显示派送人员
+function showSelectedUser(){
+  $("#selectedusers").empty();
+  for (var key in selectedUserDic) {
+  　　var item = selectedUserDic[key];
+  // 　　console.log(key); 
+  // 　　console.log(item); 
+    $("#selectedusers").append("<button onclick='deleteSelectedUser("+key+")' class='am-btn am-btn-xs am-btn-default'>"+item+"<i class='am-icon-close'></i></button>");
+  }
+}
+//派送任务
+function paisong(){
+
+// window.close();opener.location.replace(opener.location.href);
+
+
+  var userids = "";
+  console.log(selectedUserDic);
+  for (var key in selectedUserDic) {
+  　　var item = selectedUserDic[key];
+    userids += key+",";
+  }
+
+  var url = "/Api/Baoming/Add?"
+  +"&renwu_id="+{$renwu_id}
+  +"&userids="+userids;
+  console.log(url);
+  $.get(url, function(result){
+      console.log(result);
+      // currentjingqing = -1;
+      // alert(result.msg);
+      // log.info(result.msg);
+      window.parent.location.reload();
+      if(result.status==1){
+         
+      }
+      // log.info(result.msg);
+  });
+}
+
+$(document).ready(function(){
+  //用户一级单位变化
+  $("#organname1").change(function(){
+    //alert($("#organname1").val());
+    $("#organname2").empty();
+    $("#organname2").append("<option value=''>二级单位</option>");
+    url = "/Api/Organ/organname2?organname1="+$("#organname1").val();
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      for (var i = 0;i<result.length;i++) {
+        $("#organname2").append("<option value='"+result[i]["name"]+"'>"+result[i]["name"]+"</option>");
+      }
+    });
+    
+  });
+  //派送一级单位变化
+  $("#jingqingorganname1").change(function(){
+    // alert($("#organname1").val());
+    $("#jingqingorganname2").empty();
+    $("#jingqingorganname2").append("<option value=''>二级单位</option>");
+    url = "ajax/depart?organ_id="+$("#jingqingorganname1").val();
+    console.log(url);
+    $.get(url, function(result){
+      result=result['data'];
+      console.log(result);
+      for (var i = 0;i<result.length;i++) {
+        $("#jingqingorganname2").append("<option value='"+result[i]["value"]+"'>"+result[i]["name"]+"</option>");
+      }
+    });
+    $("#jingqingusers").empty();
+    url = "/Api/User/Organ?organ_id="+$("#jingqingorganname1").val()+"&depart_id="+$("#jingqingorganname2").val();
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      for (var i = 0;i<result.length;i++) {
+        $("#jingqingusers").append("<option value='"+result[i]["id"]+"'>"+result[i]["nickname"]+"</option>");
+      }
+    });
+    
+  });
+  //派送二级单位变化
+  $("#jingqingorganname2").change(function(){
+    $("#jingqingusers").empty();
+    url = "/Api/User/Organ?organ_id="+$("#jingqingorganname1").val()+"&depart_id="+$("#jingqingorganname2").val();
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      for (var i = 0;i<result.length;i++) {
+        $("#jingqingusers").append("<option value='"+result[i]["id"]+"'>"+result[i]["nickname"]+"</option>");
+      }
+    });
+    
+  });
+
+});
+
+</script>
+ <div class="am-u-md-12" style="margin: 5px;">  
+    <p style="margin: 5px;">接收人：</p>
+    <div class="am-u-md-4">
+      <select  id="jingqingorganname1">
+        <option value=" ">一级单位</option>
+        {volist name="organlist" id="vo"}
+        <option value="{$vo.id}">{$vo.name}</option>
+        {/volist}
+      </select>
+    </div>
+    <div class="am-u-md-4">                      
+      <select  id="jingqingorganname2">
+        <option value="">二级单位</option>
+        <volist name="organname2" id="vo">
+        <option value="{$vo.id}">{$vo.name}</option>
+        </volist>
+      </select>
+    </div>
+    <div class="am-u-md-4">
+      <select id="jingqingusers">
+      </select>
+    </div>
+    <div class="am-u-md-12" style="padding: 5px;">
+      <button type="button" onclick="addPaisongUser()" class="am-btn am-btn-primary am-btn-xs">添加个人</button>
+      <button type="button" onclick="addPaisongOrgan()" class="am-btn am-btn-success am-btn-xs">添加部门</button>
+      <button type="button" onclick="clearPaisongUser()" class="am-btn am-btn-danger am-btn-xs">全部清空</button>
+      <!-- <button type="button" onclick="drawRectangle()" class="am-btn am-btn-default am-btn-xs">地图框选</button> -->
+    </div>
+    <div  class="am-u-md-12" style="width: 100%;height: 100px;overflow-y: scroll;padding: 2px;"  >
+      <div  class="am-u-md-12" style="width: 100%;padding: 2px;"  id="selectedusers"></div>
+    </div>
+    <!-- <textarea style="width: 100%;" rows="4" id="selectedusers"></textarea> -->
+    <div class="am-u-md-12" style="padding: 5px;">
+      <button type="button" onclick="paisong()" class="am-btn am-btn-primary am-btn-xs">派 送</button>
+<!--       <button type="button" onclick="jingqinginfoHide()" class="am-btn am-btn-success am-btn-xs">关 闭</button> -->
+    </div>
+  </div>

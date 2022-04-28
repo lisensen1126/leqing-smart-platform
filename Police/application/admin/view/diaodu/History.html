@@ -1,0 +1,219 @@
+<link rel="stylesheet" href="/Public/css/layui.css">
+<link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+<link rel="stylesheet" href="/Public/css/amazeui.min.css"/>
+<link rel="stylesheet" href="/Public/css/admin.css">
+<link rel="stylesheet" href="/Public/css/my.css">
+<script type="text/javascript" src="/Public/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/Public/myplugs/js/plugs.js"></script>
+<script src="/Public/js/amazeui.min.js"></script>
+<script src="/Public/js/app.js"></script>
+<script src="/Public/js/layui.js"></script>
+<script src="/Public/js/my.js"></script>
+<style type="text/css">
+  .padd3{
+    margin: 3px;
+  }
+    */
+/*定义了滚动条整体样式；*/ 
+  ::-webkit-scrollbar{
+  height: 28px !important;
+    width: 1px !important;
+}
+</style>
+
+
+<!-- content start -->
+<div class="admin-content" style="overflow-y: hidden;height: 100%;" id="main">
+  <div class="am-u-sm-12" style="height: 100%;padding: 0px;">
+   <!--  <div class="am-cf am-padding am-padding-bottom-0">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">{$item}管理</strong> / <small> {$item}列表</small></div>
+    </div> -->
+
+
+    
+<!--  <hr> -->
+    <div  style="height: 100%;">
+      <div class="am-u-sm-12"  style="height: 100%">
+        <!-- <div id="container" style="width: 80%;height: 50rem;"  ></div> -->
+        <div id="container" style="width: 100%; height: 100%;" class="map" ></div>
+        <div id="panel"></div>
+        <div class=" am-icon-list xuanfubtn" onclick="quanping()"></div>
+
+
+        
+        <!-- 警情表 -->
+        <div class="am-panel am-panel-default xuanfuleft" style="width: 500px;">
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}" style="background-color: #3368C4;color: white;">警情列表<span class="am-icon-chevron-down am-fr" ></span></div>
+          <div class="am-panel-bd am-collapse am-in" id="collapse-panel-2" style="padding: 0px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 500px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-u-sm-12 font8"  style="height: 100px;padding: 2px;">
+                  <div class="am-u-sm-6 ">
+                    <div class="am-form-group">
+                      <input  type="checkbox" id="jingqingmapin" name="地图内搜索" value="地图内搜索">地图内搜索
+                    </div>
+                  </div>
+                  <div class="am-u-sm-6 ">
+                    <div class="am-form-group">
+                      <select name="type" id="jingqingtype1" style="font-size: 8px; height: 35px;" >
+                        <option value="">所有类别</option>
+                        <option value="警情联动">警情联动</option>
+                        <option value="调度指令">调度指令</option>
+                      </select>
+                    </div>
+                  </div>                  
+                  <div class="am-u-sm-12 font8">
+                    <div class="am-input-group am-input-group-sm">
+                      <input type="text" name="realname" id="jingqingtitle" class="am-form-field" placeholder="标题">
+                    <span class="am-input-group-btn ">
+                      <button class="am-btn am-btn-default" onclick="getJingqing()" type="button">搜索</button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="am-tabs-bd" >
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table class="am-table font8">
+                      <!-- <table class="am-table am-table-striped am-table-hover table-main"> -->
+                      <thead>
+                      <tr>
+                        <th class="table-title" id="th1">标题</th>
+                        <th class="table-type" id="th2">内容</th>
+                        <th class="table-type" id="th2">时间</th>
+                        <th class="table-type" id="th2">状态</th>
+                        <th class="table-type" id="th2">完结陈述</th>
+                      </tr>
+                      </thead>
+                      <tbody id="jingqinglist">
+                      <!--   <volist name="jingqinglist" id="vo">
+                        <tr>
+                          <td>{$vo.title}</td>
+                          <td>{$vo.address}</td>                              
+                          <td>{$vo.timeadd}</td>                              
+                        </tr>              
+                      </volist> -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 警情表 -->
+        <!-- 派送表 -->
+        <div class="am-panel am-panel-default xuanfuleft" style="display: none;width: 500px;" id="userpanel" >
+          <div onclick="userpanelHide()" class="am-panel-hd am-cf"style="background-color: #3368C4;color: white;"><span class="am-icon-chevron-left " ></span>派送列表</div>
+          <div class="am-panel-bd am-collapse am-in"  style="padding: 0px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 500px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >                
+                <div class="am-tabs-bd" >
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table class="am-table font8">
+                      <thead>
+                      <tr>
+                        <th class="table-title" id="th1">标题</th>
+                        <th class="table-type" id="th2">完结</th>
+                        <th class="table-type" id="th2">陈述</th>
+                        <th class="table-type" id="th2">得分</th>
+                        <th class="table-type" id="th2">操作</th>
+                      </tr>
+                      </thead>
+                      <tbody id="userlist">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 派送表 -->
+        <!-- 派送详情 -->
+        <div class="am-panel am-panel-default xuanfuyou" id="paisonginfo" style="display: none;">
+          <div class="am-panel-hd am-cf"  style="background-color: #3368C4;color: white;" >派送详情<span class="am-icon-close am-fr" onclick="paisonginfoHide()" ></span></div>
+          <div class="am-panel-bd " style="padding: 0px;">
+            <div class="am-panel am-panel-default" style="height: 100%">
+              <div class="am-panel-bd">
+                <div class="am-g">
+                  <div class="am-u-md-12" style="margin: 5px;">
+                    <p style="margin: 5px;">反馈时间：<span id="paisonginfotime">2021-12-16 08：00：00</span></p>
+                    <p style="margin: 5px;">反馈人：<span id="paisonginfoname">王先生(15234762345)</span></p>
+                    <p style="margin: 5px;">反馈地点：<span></span></p>
+                    <textarea style="width: 100%;" rows="1"  id="paisonginfoaddress">温州市乐清市哒哒哒街呃呃呃号</textarea>
+                    <p style="margin: 5px;">反馈内容：</p>
+                    <textarea style="width: 100%;" rows="4" id="paisonginfocontent"></textarea>
+                    <p style="margin: 5px;">图片：</p>
+                    <img id="paisonginfoimage" style="width: 240px;height: 240px;">
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 派送详情 -->
+        <!-- 派送完结 -->
+        <div class="am-panel am-panel-default xuanfuzhong"  id="paisongcomplete" style="display: none;height: 200px;">
+          <div class="am-panel-hd am-cf"   style="background-color: #3368C4;color: white;">派送完结<span class="am-icon-close am-fr"  onclick="paisongcompleteHide()" ></span></div>
+          <div class="am-panel-bd " id="collapse-panel-2" style="padding: 0px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 150px;width: 300px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-u-sm-12 font8"  style="height: 100px;padding: 2px;">                 
+                  <div class="am-u-sm-12 font8">
+                    <div class="am-input-group am-input-group-sm">
+                      <input type="text"  id="completecontnt" placeholder="完结" class="am-form-field padd3" placeholder="请输入陈述">
+                      <input type="text"   id="completescore" placeholder="10" class="am-form-field padd3" placeholder="请输入奖励">
+                    
+                    </div>
+                    <span class="am-input-group-btn ">
+                      <button class="am-btn am-btn-sm am-btn-primary am-btn-block padd3" onclick="jiangliApi()" type="button">完结</button>
+                    </span>
+                  </div>
+
+                </div>                
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 派送完结 -->
+        
+      </div>
+    </div>
+  </div>
+  <!-- footer start -->
+<!--     <include file="Public/footer" />
+-->    <!-- footer end -->
+  
+
+</div>
+<!-- content end -->
+
+
+  
+  <script type="text/javascript">
+    //添加编辑弹出层
+    function updatePwd(title, id) {
+      $.jq_Panel({
+        title: title,
+        iframeWidth: 500,
+        iframeHeight: 300,
+        url: "updatePwd.html"
+      });
+    }
+  </script>
+  <script src="/Public/js/layui.js"></script>
+  <script>
+    //JavaScript代码区域
+    layui.use('element', function() {
+      var element = layui.element;
+
+    });
+  </script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.MouseTool,AMap.Walking"></script>
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<!--   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.Walking"></script> -->
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>  
+<script type="text/javascript" src="/PUblic/js/history.js"></script>  
+

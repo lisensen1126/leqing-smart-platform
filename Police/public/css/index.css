@@ -1,0 +1,40 @@
+@charset "utf-8";
+/* CSS Document */
+.title_bg{background:url(../images/bg.png) repeat-x top; background-size:contain; padding:.8rem .2rem; border-bottom:1px solid #ddd; overflow:auto; margin-bottom:.6rem;}
+.title_bg .row_1{ text-align:center; margin:0 .6rem; font-size:.9rem;}
+.title_bg .row_1 span{ font-size:.8rem; color:#E61E20;}
+.title_bg .row_2{  margin-top:.6rem; margin-left:.1rem;}
+.title_bg .row_2 li{ float:left; border-radius:50%; color:#fff; margin:0 .2rem; line-height:1.8rem; text-align:center;width:1.8rem;; height:1.8rem;}
+.title_bg .row_2 li:first-child{ background:#DF5E6B;}
+.title_bg .row_2 li:nth-child(2){background:#894597;}
+.title_bg .row_2 li:nth-child(3){background:#00A1E1;}
+.title_bg .row_2 li:nth-child(4){background:#005CAC;}
+.title_bg .row_2 li:nth-child(5){background:#CB0080;}
+.title_bg .row_3{ text-align:center; margin:0 .6rem; font-size:.9rem;}
+.title_bg .row_3 span{ font-size:.9rem; color:#E61E20;}
+.menu_s{ clear:both; width:100%; overflow:auto}
+.menu_s li{text-align:center; float:left; margin:.6rem 15%;}
+.menu_s li span{ background:#A6A6A6; border-radius:50%; padding:10px; width:3rem; height:3rem; color:#fff; text-align:center; display:inline-block}
+.menu_s li .over{background:#F4B639;}
+
+.qu_menu li{ float: left; text-align:center; width:22%;}
+.qu_menu li a.over{ color:#E7941E}
+.qu_menu li span{ height:2px; width:60px; display:inline-block; background:#E7941E;}
+
+.tjm_list{width:96%; margin:0 auto;border: 2px solid #74A4F3; overflow:auto; border-radius:50px;}
+.tjm_list li{ float:left; width:33.2%;}
+.tjm_list li .pull-right{ float:none;overflow: auto;
+    padding: 8px;
+    text-align: center;}
+.tjm_list li .pull-right span{ border-radius:50%; background:#F00; color:#fff; text-align:center; display:inline-block; line-height:27px; width:27px; height:27px; margin:0 .1rem; font-size:15px;}
+.tjm_list li.one,.tjm_list li.two,.tjm_list li.three{font-size:1rem; padding-left:0rem;padding-top:.6rem; text-align:center}
+.tjm_list li.one{}
+.tjm_list li.two{}
+.tjm_list li.three{}
+
+.list_kj_body{ margin:.9rem  auto; width:98%;}
+.list_kj_body table{ font-size:.75rem; background:#fff; color:#fff; text-align:center}
+.list_kj_body th{ background:#74A4F3; color:#fff; font-weight:100; line-height:26px;font-size:1rem;}
+.list_kj_body th:first-child{  border-top-left-radius:10px;}
+.list_kj_body th:last-child{  border-top-right-radius:10px;}
+.list_kj_body td{ line-height:26px; color:#222;font-size:1rem;}

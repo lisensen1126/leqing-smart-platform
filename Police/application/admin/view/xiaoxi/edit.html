@@ -1,0 +1,289 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title|htmlentities}">
+        </div>
+    </div>
+  <!--   <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('User_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-user_id" data-rule="required" data-source="user/user/index" data-field="nickname" class="form-control selectpage" name="row[user_id]" type="text" value="{$row.user_id|htmlentities}">
+        </div>
+    </div> -->
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-content" class="form-control editor" rows="5" name="row[content]" cols="50">{$row.content|htmlentities}</textarea>
+        </div>
+    </div>
+ <!--    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            
+            <div class="radio">
+            {foreach name="statusList" item="vo"}
+            <label for="row[status]-{$key}"><input id="row[status]-{$key}" name="row[status]" type="radio" value="{$key}" {in name="key" value="$row.status"}checked{/in} /> {$vo}</label> 
+            {/foreach}
+            </div>
+
+        </div>
+    </div> -->
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Memo')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-memo" class="form-control" name="row[memo]" type="text" value="{$row.memo|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Groups')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-groups" class="form-control" name="row[groups]" type="text" value="{$row.groups|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Organs')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-organs" class="form-control" name="row[organs]" type="text" value="{$row.organs|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Departs')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-departs" class="form-control" name="row[departs]" type="text" value="{$row.departs|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <!-- <label class="control-label col-xs-12 col-sm-2">派送:</label> -->
+        <ul id="treeDemo" class="ztree"></ul>
+<link rel="stylesheet" href="/css/bootstrapztree.css" type="text/css">  
+  <script type="text/javascript" src="/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="/js/jquery.ztree.excheck.js"></script>
+  <script type="text/javascript" src="/js/jquery.ztree.exedit.js"></script>
+<SCRIPT type="text/javascript">
+// check事件
+function zTreeOnCheck(event, treeId, treeNode) {  
+    var groups = ",";
+    var organs = ",";
+    var departs = ",";      
+    console.log("treeNode.tId:"+treeNode.tId);
+    console.log("treeNodeid:"+treeNode.id);
+    var checkedNodes = $treer.getCheckedNodes();
+    console.log(checkedNodes); 
+    for(var i=0;i<checkedNodes.length;i++){
+        thisid = checkedNodes[i]['id']
+        if(thisid>=2000){
+            a = thisid-2000;
+            organs=organs+a+","  ;  
+        }else if(thisid>=1000){
+            a = thisid-1000;
+            groups=groups+a+","  ;  
+        }else{
+            a = thisid;
+            departs=departs+a+","  ;  
+        }
+    }
+    $("#c-groups").val(groups);
+    $("#c-organs").val(organs);
+    $("#c-departs").val(departs);       
+}   
+ 
+        
+var setting = {
+    view: {
+        addHoverDom: addHoverDom,
+        removeHoverDom: removeHoverDom,
+        selectedMulti: false
+    },
+    check: {
+        enable: true,
+        chkboxType: {"Y":"s","N":"s" }
+    },
+    data: {
+        simpleData: {
+            enable: true
+        }
+    },
+    callback:{
+      onCheck:zTreeOnCheck,
+    },
+    edit: {
+        enable: false
+    }
+};
+
+var zNodes =[
+    {id:1001, pId:0, name:"警察"},
+    {id:1002, pId:0, name:"保安"}
+    ];
+
+$(document).ready(function(){
+  getRenwu();
+     // getOrgan();
+});
+
+grouplist = Array();
+organlist = Array();
+departlist = Array();  
+checkedNodeList = Array(); 
+var $treer; 
+var j = 0;
+function getRenwu(){
+  url = "/Api/Rule/Node?type=xiaoxi&id="+{$ids};
+  $.ajax({
+    url: url,
+    type: "get",
+    dataType: "json",
+    ContentType: "application/json; charset=utf-8",
+    async: false,
+    success: function (data) {
+        $treer = $.fn.zTree.init($("#treeDemo"), setting, data);
+        $treer.expandAll(true);
+    },
+    error: function () {
+        alert("zNodes");
+    }
+});  
+
+
+    // url = "/Api/Rule/Node?type=renwu&id="+{$ids};
+    // console.log(url);
+    // $.get(url, function(result){
+    //   console.log(result);
+
+    //   // var jj = 0;
+    //   // groupids = result['groups'].split(",");
+    //   // console.log(groupids);
+    //   // for(var i=0;i<groupids.length;i++){
+    //   //   if(groupids[i]>0){
+    //   //     checkedNodeList[jj] = 100+groupids[i];
+    //   //     jj++;
+    //   //   }
+    //   //   console.log(checkedNodeList);
+    //   // }
+
+    //   // organids = result['organs'].split(",");
+    //   // console.log(organids);
+    //   // for(var i=0;i<organids.length;i++){
+    //   //   if(organids[i]>0){
+    //   //     checkedNodeList[jj] = 200+organids[i];
+    //   //     jj++;
+    //   //   }
+    //   //   console.log(checkedNodeList);
+    //   // }
+
+    //   // departids = result['departs'].split(",");
+    //   // console.log(departids);
+    //   // for(var i=0;i<departids.length;i++){
+    //   //   if(departids[i]>0){
+    //   //     checkedNodeList[jj] = departids[i];
+    //   //     jj++;
+    //   //   }
+    //   //   console.log(checkedNodeList);
+    //   // }
+    //   // for(var i = 0;i<zNodes.length;i++){
+    //   //   if(checkedNodeList.indexOf(zNodes[i]["id"]) >=0){
+    //   //     zNodes[i]["checked"]=true;
+    //   //   }
+    //   // }
+    //   $treer = $.fn.zTree.init($("#treeDemo"), setting, result);
+      
+    // });  
+}
+
+function getOrgan(){
+    url = "/Api/Rule/Organ";
+    console.log(url);  
+$.ajax({
+    url: url,
+    type: "get",
+    dataType: "json",
+    ContentType: "application/json; charset=utf-8",
+    async: false,
+    success: function (data) {
+        j = 2;
+        organlist = data;
+        for (var i = 0;i<data.length;i++) {
+        // console.log(data[i]);
+        zNodes[j] = Array();  
+        zNodes[j]["id"]=data[i]["id"]+2000;
+        zNodes[j]["pId"]=data[i]["type_id"]+1000;
+        zNodes[j]["name"]=data[i]["name"];
+        // if(checkedNodeList.indexOf(zNodes[j]["id"]) >=0)zNodes[j]["checked"]=true;
+        j++;
+        } 
+        getDepart();
+    },
+    error: function () {
+        alert("zNodes");
+    }
+});       
+}
+
+
+function getDepart(){
+    url = "/Api/Rule/Depart";
+    console.log(url);
+$.ajax({
+url: url,
+type: "get",
+dataType: "json",
+ContentType: "application/json; charset=utf-8",
+async: false,
+success: function (data) {
+departlist = data;
+    for (var i = 0;i<data.length;i++) {
+        zNodes[j] = Array();  
+        zNodes[j]["id"]=data[i]["id"];
+        zNodes[j]["pId"]=data[i]["organ_id"]+2000;
+        zNodes[j]["name"]=data[i]["name"];
+        // if(checkedNodeList.indexOf(zNodes[j]["id"]) >=0)zNodes[j]["checked"]=true;
+        j++;        
+    } 
+    console.log(zNodes);
+    $treer = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    getRenwu();
+    
+},
+error: function () {
+    alert("zNodes");
+}
+});    
+}
+// function seend(){
+//     var sNodes = $treer.getCheckedNodes();
+//         console.log(sNodes);
+// }
+
+var newCount = 1;
+function addHoverDom(treeId, treeNode) {
+    // treeNode.tId = treeNode.id;
+    console.log(treeNode);
+    var sObj = $("#" + treeNode.tId + "_span");
+    if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+    var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+        + "' title='add node' onfocus='this.blur();'></span>";
+    sObj.after(addStr);
+    var btn = $("#addBtn_"+treeNode.tId);
+    if (btn) btn.bind("click", function(){
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+        return false;
+    });
+};
+function removeHoverDom(treeId, treeNode) {
+    $("#addBtn_"+treeNode.tId).unbind().remove();
+};
+</SCRIPT>
+       
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed ">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,110 @@
+[
+	{
+		"month": "1:00",
+		"sh_market_capitalization": 27,
+		"sh_transaction_amount": 56,
+		"sh_pe_ratio": 19.25,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "2:00",
+		"sh_market_capitalization": 35,
+		"sh_transaction_amount": 85,
+		"sh_pe_ratio": 18.29,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "3:00",
+		"sh_market_capitalization": 31,
+		"sh_transaction_amount": 41,
+		"sh_pe_ratio": 17.77,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "4:00",
+		"sh_market_capitalization": 31,
+		"sh_transaction_amount": 34,
+		"sh_pe_ratio": 17.31,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "5:00",
+		"sh_market_capitalization": 32,
+		"sh_transaction_amount": 36,
+		"sh_pe_ratio": 15.16,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "6:00",
+		"sh_market_capitalization": 29,
+		"sh_transaction_amount": 31,
+		"sh_pe_ratio": 14.06,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "7:00",
+		"sh_market_capitalization": 30,
+		"sh_transaction_amount": 64,
+		"sh_pe_ratio": 14.29,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "8:00",
+		"sh_market_capitalization": 29,
+		"sh_transaction_amount": 25,
+		"sh_pe_ratio": 13.58,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "9:00",
+		"sh_market_capitalization": 30,
+		"sh_transaction_amount": 21,
+		"sh_pe_ratio": 14.07,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "10:00",
+		"sh_market_capitalization": 27,
+		"sh_transaction_amount": 24,
+		"sh_pe_ratio": 13,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "11:00",
+		"sh_market_capitalization": 30,
+		"sh_transaction_amount": 29,
+		"sh_pe_ratio": 13.88,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	},
+	{
+		"month": "12:00",
+		"sh_market_capitalization": 32,
+		"sh_transaction_amount": 30,
+		"sh_pe_ratio": 14.65,
+		"sz_market_capitalization": 0,
+		"sz_transaction_amount": 0,
+		"sz_pe_ratio": 0
+	}
+]

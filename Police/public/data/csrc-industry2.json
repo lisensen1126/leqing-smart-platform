@@ -1,0 +1,42 @@
+[
+	{
+		"code": "A",
+		"industry": "温度",
+		"alias": "温度",
+		"sh_stock": 15,
+		"sz_stock": 26,
+		"stock": 41
+	},
+	{
+		"code": "B",
+		"industry": "湿度",
+		"alias": "湿度",
+		"sh_stock": 51,
+		"sz_stock": 26,
+		"stock": 77
+	},
+	{
+		"code": "C",
+		"industry": "NH2",
+		"alias": "NH2",
+		"sh_stock": 78,
+		"sz_stock": 78,
+		"stock": 78
+	},
+	{
+		"code": "D",
+		"industry": "紫外线",
+		"alias": "紫外线",
+		"sh_stock": 66,
+		"sz_stock": 47,
+		"stock": 113
+	},
+	{
+		"code": "E",
+		"industry": "SH2",
+		"alias": "SH2",
+		"sh_stock": 50,
+		"sz_stock": 49,
+		"stock": 99
+	}
+]

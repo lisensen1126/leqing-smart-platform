@@ -1,0 +1,248 @@
+<!-- <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action=""> -->
+
+  <!--   <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" class="form-control" name="row[name]" type="text" value="{$row.name|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">人数限制:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-totalnum" class="form-control" name="row[totalnum]" type="text" value="{$row.totalnum|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            <select  id="c-type" class="form-control selectpicker" name="row[type]">
+                {foreach name="typeList" item="vo"}
+                    <option value="{$key}" {in name="key" value="$row.type"}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <table></table>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-content" class="form-control editor" rows="5" name="row[content]" cols="50">{$row.content|htmlentities}</textarea>
+        </div>
+    </div> -->
+    <!-- <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            
+            <div class="radio">
+            {foreach name="statusList" item="vo"}
+            <label for="row[status]-{$key}"><input id="row[status]-{$key}" name="row[status]" type="radio" value="{$key}" {in name="key" value="$row.status"}checked{/in} /> {$vo}</label> 
+            {/foreach}
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Memo')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-memo" class="form-control" name="row[memo]" type="text" value="{$row.memo|htmlentities}">
+        </div>
+    </div> -->
+<div class="panel panel-default panel-intro">    
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">派送:</label>
+        <div class="col-xs-12 col-sm-8">
+<table class="table">
+  <thead>
+    <tr>
+      <th>身份</th>
+      <th>单位</th>
+      <th>部门</th>
+    </tr>
+  </thead>
+  <tbody id="renwurule">
+    <tr>
+      <td  id="renwurulegroups">
+          <input id="group-1" type="checkbox" value=警察">警察<br>
+          <input id="group-2" type="checkbox" value="保安">保安
+      </td>
+      <td  id="renwuruleorgans">
+          
+      </td>
+      <td  id="renwuruledeparts">
+          
+      </td>
+    <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+grouplist = Array();
+organlist = Array();
+departlist = Array();    
+getOrgan(); 
+  
+
+
+function getOrgan(){
+    url = "/Api/Rule/Organ";
+    console.log(url);    
+    $.get(url, function(result){
+      console.log(result);
+      organlist = result;
+      for (var i = 0;i<result.length;i++) {
+        $("#renwuruleorgans").append('<input id="organ-'+result[i]["id"]+'" name="organ-'+result[i]["id"]+'" class="organ" type="checkbox" value="'+result[i]["name"]+'">'+result[i]["name"]+'<br>');
+      } 
+      // $("input[name*='organ']").attr("checked", true);
+      getDepart();
+      // checkboxChangeAdd();
+    });  
+}
+
+
+function getDepart(){
+    url = "/Api/Rule/Depart";
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      departlist = result;
+      for (var i = 0;i<result.length;i++) {
+        $("#renwuruledeparts").append('<input id="depart-'+result[i]["id"]+'" name="depart-'+result[i]["id"]+'" type="checkbox" value="'+result[i]["name"]+'">'+result[i]["name"]+'<br>');
+      } 
+      // $("input[name*='depart']").attr("checked", true);
+      checkboxChangeAdd();
+      getRenwu();
+    });  
+}
+function getRenwu(){
+    url = "/Api/Renwu/Find?id="+{$id};
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      groupids = result['groups'].split(",");
+      console.log(groupids);
+      for(var i=0;i<groupids.length;i++){
+        $("#group-"+groupids[i]).attr("checked", true);
+        console.log("#group-"+groupids[i]);
+      }
+
+      organids = result['organs'].split(",");
+      console.log(organids);
+      for(var i=0;i<organids.length;i++){
+        $("#organ-"+organids[i]).attr("checked", true);
+        console.log("#organ-"+organids[i]);
+      }
+
+      departids = result['departs'].split(",");
+      console.log(departids);
+      for(var i=0;i<departids.length;i++){
+        $("#depart-"+departids[i]).attr("checked", true);
+        console.log("#depart-"+departids[i]);
+      }
+      
+    });  
+}
+
+function checkboxChangeAdd(){
+    $("input[type='checkbox']").change(function(e) {
+        var selectid = e.target.id;
+        var selectchecked = $("#"+selectid).is(':checked'); 
+        console.log(selectid+selectchecked);
+
+
+        if(selectid.indexOf("group") != -1){
+            groupid = selectid.slice(6);
+            console.log(groupid);
+            for(var i=0;i<organlist.length;i++){
+                organ = organlist[i];
+                // console.log(organ);
+                if(organ['type_id'] == groupid){
+                    console.log("#organ-"+organ['id']+":"+selectchecked);
+                    $("#organ-"+organ['id']).prop("checked", selectchecked);
+                    for(var j=0;j<departlist.length;j++){
+                        depart = departlist[j];
+                        // console.log(organ);
+                        if(depart['organ_id'] == organ['id']){
+                            console.log("#depart-"+depart['id']+":"+selectchecked);
+                            $("#depart-"+depart['id']).prop("checked", selectchecked);
+                        }
+                    }
+                }
+            }
+        }
+        if(selectid.indexOf("organ") != -1){
+            organid = selectid.slice(6);
+            console.log(organid);
+            $("#organ-"+organid).prop("checked", selectchecked);
+            for(var j=0;j<departlist.length;j++){
+                depart = departlist[j];
+                if(depart['organ_id'] == organid){
+                    console.log("#depart-"+depart['id']+":"+selectchecked);
+                    $("#depart-"+depart['id']).prop("checked", selectchecked);
+                }
+            }
+
+        }
+        if(selectid.indexOf("depart") != -1){
+            departid = selectid.slice(7);
+            console.log(departid);
+
+        }
+        // alert(e.target.id);
+        // alert("11");
+    });
+}
+
+function savequanxian(){
+    var groups = ",";
+    var organs = ",";
+    var departs = ",";
+    select = $("#group-1").is(':checked');
+    if(select){
+        groups=groups+"1,"  ;  
+    }
+    select = $("#group-2").is(':checked');
+    if(select){
+        groups=groups+"2,"  ;  
+    }
+    
+    console.log(groups);
+    for(var i=0;i<organlist.length;i++){
+        select = $("#organ-"+organlist[i]['id']).is(':checked');
+        if(select){
+            organs=organs+organlist[i]['id']+","  ;  
+        }
+    }
+    console.log(organs);
+    for(var i=0;i<departlist.length;i++){
+        select = $("#depart-"+departlist[i]['id']).is(':checked');
+        if(select){
+            departs=departs+departlist[i]['id']+","  ;  
+        }
+    }
+    console.log(departs);
+    url = "/Api/Rule/Rule?type=Renwu&id="+{$id}+"&groups="+groups+"&organs="+organs+"&departs="+departs;
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+    });
+}
+$(document).ready(function(){
+    
+});
+</script>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </div>
+    <div class="form-group ">
+    <!-- <div class="form-group layer-footer"> -->
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button onclick="savequanxian()" class="btn btn-success  ">{:__('OK')}</button>
+            <!-- <button type="reset" class="btn btn-default ">{:__('Reset')}</button> -->
+        </div>
+    </div>
+<!-- </form> -->
+</div>
+

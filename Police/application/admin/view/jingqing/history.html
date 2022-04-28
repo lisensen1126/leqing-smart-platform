@@ -1,0 +1,936 @@
+<link rel="stylesheet" href="/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+    
+    <script type="text/javascript" src="/myplugs/js/plugs.js"></script>
+    <script type="text/javascript">
+    top.window.$("ul.nav-addtabs li.active").siblings().find(".close-tab").trigger("click");
+  </script>
+    <style type="text/css">
+      div{
+        height: 100%;
+      }
+    </style>
+        <!-- content start -->
+<div class="admin-content" style="overflow-y: hidden;margin: -10px;" id="main">
+  <script type="text/javascript">
+    $(document).ready(function(){
+      // alert($(window).height()); //浏览器当前窗口可视区域高度
+      $("#main").css("height",$(window).height());
+      $("#think_page_trace").css("height",10);
+    });
+    
+  </script>
+  <div class="am-u-sm-12" style="height: 100%;padding: 0px;">
+   <!--  <div class="am-cf am-padding am-padding-bottom-0">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">{$item}管理</strong> / <small> {$item}列表</small></div>
+    </div> -->
+    <style type="text/css">
+      .amap-marker-label{
+        height: 20px;
+      }
+    </style>
+
+    
+<!--  <hr> -->
+    <div  style="height: 100%;font-size: 8px;">
+      <div class="am-u-sm-12"  style="height: 100%;position: relative;float: left;padding: 0px;">
+        <!-- <div id="container" style="width: 80%;height: 50rem;"  ></div> -->
+        <div id="container" style="width: 100%; height: 100%;position: absolute;" class="map" style=""></div>
+<!--         <div id="panel"></div>-->
+        <!-- <div   style="position: absolute;float: left;">
+          <a class=" am-icon-list xuanfubtn"  target="_blank" href="map"></a>
+        </div> -->
+        <!-- <div class="row xuanfubtnyou1"  style="height: auto; position: absolute;float: right;right: 20px;bottom: 0px;">           
+          <div class="btn-group dropup">
+              <button type="button" onclick="jingqinglistShow()" class="btn btn-primary " ><i class="am-icon-joomla" style="font-size: 40px;"></i> 
+              </button>
+              
+          </div>
+        </div> -->
+        <div class="am-panel am-panel-default xuanfuleft"  onclick="jingqinglistShow()" style="position: absolute;float: left;left: 60px;z-index: 880;height: auto;">
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}" style="background-color: #3368C4;color: white;height: auto;">警情列表</div>
+        </div>
+         <!-- 警情列表 -->
+        <div class="am-panel am-panel-default xuanfuleft"  id="jingqingliebiao"  style="position: absolute;float: left;left: 60px;z-index: 888;width: 500px;height: 440px;font-style: 8px;">
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}" style="background-color: #3368C4;color: white;height: auto;">警情列表<span onclick="jingqinglistHide()" class="am-icon-close am-fr" ></span></div>
+          <script type="text/javascript">
+            function jingqinglistHide(){
+              $("#jingqingliebiao").hide();
+            }
+            function jingqinglistShow(){
+              $("#jingqingliebiao").show();            
+            }
+          </script>
+
+          <div class="am-panel-bd am-collapse am-in" id="collapse-panel-2" style="padding: 0px;height: 400px;font-size: 8px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 500px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-u-sm-12 font8"  style="height: 100px;padding: 2px;">
+                  <div class="am-u-sm-6 " style="height: auto;">
+                    <div class="am-form-group" style="height: auto;">
+                      <input  type="checkbox" id="jingqingmapin" name="地图内搜索" value="地图内搜索">地图内搜索
+                    </div>
+                  </div>
+                  <div class="am-u-sm-3 " style="height: auto;">
+                    <div class="am-form-group" style="height: auto;">
+                      <select name="type" id="jingqingtype1" style="font-size: 8px; height: 35px;" >
+                        <option value="">所有类别</option>
+                        <option value="警情联动">警情联动</option>
+                        <option value="调度指令">调度指令</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="am-u-sm-3 " style="height: auto;">
+                    <div class="am-form-group" style="height: auto;">
+                      <select name="state" id="jingqingstate" style="font-size: 8px; height: 35px;" >
+                        <option value="">所有状态</option>
+                        <option value="未派送">未派送</option>
+                        <option value="已派送">已派送</option>
+                        <option value="已完结">已完结</option>
+                      </select>
+                    </div>
+                  </div>                  
+                  <div class="am-u-sm-12 font8" style="height: auto;">
+                    <div class="am-input-group am-input-group-sm">
+                      <input type="text" name="realname" id="jingqingtitle" class="am-form-field" placeholder="标题">
+                    <span class="am-input-group-btn ">
+                      <button class="am-btn am-btn-default" onclick="getJingqingClear()" type="button">搜索</button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="am-tabs-bd"  style="height: auto;">
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table class="am-table font8">
+                      <!-- <table class="am-table am-table-striped am-table-hover table-main"> -->
+                      <thead>
+                      <tr>
+                        <th class="table-title" id="th1">标题</th>
+                        <th class="table-type" id="th2">时间</th>
+                        <th class="table-type" id="th2">状态</th>
+                        <th class="table-type" id="th2">反馈</th>
+                      </tr>
+                      </thead>
+                      <tbody id="jingqinglist">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 警情列表 -->
+        <!-- 派送列表 -->
+        <div class="am-panel am-panel-default xuanfuleft"  id="userpanel"  style="position: absolute;float: left;left: 60px;z-index: 7000;width: 500px; height: 440px;font-size: 8px;display: none;">
+          <div  class="am-panel-hd am-cf"style="background-color: #3368C4;color: white;height: auto;">派送列表<span onclick="userpanelHide()" class="am-icon-close am-fr" ></span></div>
+          <div class="am-panel-bd am-collapse am-in"  style="padding: 0px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 500px; padding: 0px;">  <style type="text/css">
+              .padd3{
+                margin: 3px;
+              }
+            </style>       
+              <div class="am-tabs " data-am-tabs  >                
+                <div class="am-tabs-bd"  style="height: auto;">
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table class="am-table font8">
+                      <thead>
+                      <tr>
+                        <th class="table-title" id="th1">标题</th>
+                        <th class="table-type" id="th2">完结</th>
+                        <th class="table-type" id="th2">陈述</th>
+                        <th class="table-type" id="th2">得分</th>
+                        <th class="table-type" id="th2">操作</th>
+                      </tr>
+                      </thead>
+                      <tbody id="userlist">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 派送列表 -->
+        <!-- 派送详情 -->
+        <!-- <div class="am-panel am-panel-default xuanfuyou" id="paisonginfo" style="position: absolute;float: left;left: 60px;z-index: 9999;height: 440px;font-size: 8px;display: none;"> -->
+        <div class="am-panel am-panel-default xuanfuyou"  id="paisonginfo"  style="position: absolute;float: left;left: 60px;z-index: 8000;width: 500px;height: 440px;font-size: 8px;display: none;">
+          <div class="am-panel-hd am-cf"  style="background-color: #3368C4;color: white;height: auto;" >派送详情<span class="am-icon-close am-fr" onclick="paisonginfoHide()" ></span></div>
+          <div class="am-panel-bd " style="padding: 0px;">
+            <div class="am-panel am-panel-default" style="height: 100%">
+              <div class="am-panel-bd">
+                <div class="am-g">
+                  <div class="am-u-md-12" style="margin: 5px;">
+                    <p style="margin: 5px;">反馈时间：<span id="paisonginfotime">2021-12-16 08：00：00</span></p>
+                    <p style="margin: 5px;">反馈人：<span id="paisonginfoname">王先生(15234762345)</span></p>
+                    <p style="margin: 5px;">反馈地点：<span></span></p>
+                    <textarea style="width: 100%;" rows="1"  id="paisonginfoaddress">温州市乐清市哒哒哒街呃呃呃号</textarea>
+                    <p style="margin: 5px;">反馈内容：</p>
+                    <textarea style="width: 100%;" rows="4" id="paisonginfocontent"></textarea>
+                    <p style="margin: 5px;">图片：</p>
+                    <img id="paisonginfoimage" style="width: 100px;height: 100px;">                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 派送详情 -->
+        <!-- 派送完结 -->
+        <div class="am-panel am-panel-default xuanfuzhong"  id="paisongcomplete" style="position: absolute;float: left;left: 60px;z-index: 9000;height: 200px;font-size: 8px;display: none;">
+          <div class="am-panel-hd am-cf"   style="background-color: #3368C4;color: white;height: auto;">派送完结<span class="am-icon-close am-fr"  onclick="paisongcompleteHide()" ></span></div>
+          <div class="am-panel-bd " id="collapse-panel-2" style="padding: 0px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 500px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-u-sm-12 font8"  style="height: 200px;padding: 2px;">                 
+                  <div class="am-u-sm-12 font8">
+                    <div class="am-input-group am-input-group-sm">
+                      <input type="text"  id="completecontnt" placeholder="完结" class="am-form-field padd3" placeholder="请输入陈述">
+                      <input type="text"   id="completescore" placeholder="10" class="am-form-field padd3" placeholder="请输入奖励">
+                    
+                    </div>
+                    <span class="am-input-group-btn ">
+                      <button class="am-btn am-btn-sm am-btn-primary am-btn-block padd3" onclick="jiangliApi()" type="button">完结</button>
+                    </span>
+                  </div>
+
+                </div>                
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 派送完结 -->
+        <!-- 轨迹表 -->
+        <div class="am-panel am-panel-default xuanfuleft" id="locationpanel"  style="position: absolute;float: left;left: 60px;z-index: 9999;height: 440px;display: none;">
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}" style="background-color: #3368C4;color: white;height: auto;">轨迹列表<span onclick="locationlistHide()" class="am-icon-close am-fr" ></span></div>
+          <script type="text/javascript">
+            function locationlistHide(){$("#locationpanel").hide();}
+            function locationlistHide(){$("#locationpanel").hide();}
+          </script>
+          <div class="am-panel-bd am-collapse am-in" id="collapse-panel-2" style="padding: 0px;height: 400px;font-size: 8px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 500px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-tabs-bd"  style="height: auto;">
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table class="am-table font8">
+                      <!-- <table class="am-table am-table-striped am-table-hover table-main"> -->
+                      <thead>
+                      <tr>
+                        <th class="table-type" id="th2">地址</th>
+                        <th class="table-type" id="th2">经度</th>
+                        <th class="table-type" id="th2">纬度</th>
+                        <th class="table-type" id="th2">时间</th>
+                      </tr>
+                      </thead>
+                      <tbody id="locationlist">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 轨迹表 -->
+       
+       
+      </div>
+    </div>
+  </div>
+  <!-- footer start -->
+<!--     <include file="/footer" />
+-->    <!-- footer end -->
+  
+
+</div>
+<!-- content end -->
+
+  <script type="text/javascript">
+    //添加编辑弹出层
+    function updatePwd(title, id) {
+      $.jq_Panel({
+        title: title,
+        iframeWidth: 500,
+        iframeHeight: 300,
+        url: "updatePwd.html"
+      });
+    }
+  </script>
+  <script src="/js/layui.js"></script>
+  <script>
+    //JavaScript代码区域
+    layui.use('element', function() {
+      var element = layui.element;
+
+    });
+  </script>
+
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.MouseTool,AMap.Geocoder"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.MouseTool,AMap.Walking"></script>
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<!--   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.Walking"></script> -->
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>  
+<!-- <script type="text/javascript" src="/js/my.js"></script>
+<script type="text/javascript" src="/js/history.js"></script>   -->
+<script type="text/javascript">
+  var jingqings = [];
+var users = [];
+var locations = [];
+
+var paisongs = [];
+var selectedusers = [];//选中的人员id列表
+var selectedUserDic = new Array();//选中的人员字典
+var peopleShow = 1;
+var markers = [];
+var currentjingqing = -1;//当前选中的警情id
+var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+
+//地图初始化
+var map = new AMap.Map("container", {
+  resizeEnable: true,
+  center: [120.986678, 28.112493],//地图中心点
+  zoom: 13 //地图显示的缩放级别
+}); 
+var mouseTool = new AMap.MouseTool(map);
+map.on("moveend",getbounds);
+map.clearMap( );  
+getPeople();  
+getJingqing();
+map.on('click',function(e){
+  console.log(e.lnglat);
+  document.getElementById('lng').value=e.lnglat.lng;
+  document.getElementById('lat').value=e.lnglat.lat;
+  regeoCode(e.lnglat);
+    // document.getElementById('coordinate').value = e.lnglat;
+    // regeoCode();
+})  ;
+var geocoder = new AMap.Geocoder({
+    city: "0577", //城市设为北京，默认：“全国”
+    radius: 1000 //范围，默认：300
+});
+var marker = new AMap.Marker();;
+// function regeoCode(lnglat) {    
+//     geocoder.getAddress(lnglat, function(status, result) {
+//         if (status === 'complete'&&result.regeocode) {
+//             var address = result.regeocode.formattedAddress;
+//             // alert(address);
+//             document.getElementById('address').value=address;
+//         }else{
+//             log.error('根据经纬度查询地址失败')
+//         }
+//     });
+// }
+// //地图框选
+// function drawRectangle () {
+//   $("#jingqinginfo").hide();
+//     mouseTool.rectangle({
+//       strokeColor:'gray',
+//       strokeOpacity:0.5,
+//       strokeWeight: 1,
+//       fillColor:'gray',
+//       fillOpacity:0.5,
+//       // strokeStyle还支持 solid
+//       strokeStyle: 'solid',
+//       // strokeDasharray: [30,10],
+//     })
+     
+   
+// }
+// mouseTool.on('draw', function(event) {
+//   console.log(event.obj.getBounds().northeast+"-"+event.obj.getBounds().southwest);
+//   setTimeout(function (){
+//     getKuangPeople(event.obj);
+//   }, 30);
+//   setTimeout(function (){
+//     mouseTool.close(true);;
+//   }, 300);
+//   $("#jingqinginfo").show();
+//   //log.info('覆盖物对象绘制完成');
+// })
+
+// //获取框选的人员
+// function getKuangPeople(ask){
+  
+//   type = $("#usertype").val();
+//   organname1 = $("#organname1").val();
+//   organname2 = $("#organname2").val();
+//   usermapin = true;
+//   isonline = false;
+//   lngmin = ask.getBounds().getSouthWest( ).getLng( );
+//   latmin = ask.getBounds().getSouthWest( ).getLat( );
+//   lngmax = ask.getBounds().getNorthEast( ).getLng( );
+//   latmax = ask.getBounds().getNorthEast( ).getLat( );
+
+//   url = "/Api/User/Realname?lngmin="+lngmin+"&latmin="+latmin+"&lngmax="+lngmax+"&latmax="+latmax
+//   +"&group_id="+type+"&organname1="+organname1+"&organname2="+organname2+"&realname="+realname
+//   +"&mapin="+usermapin+"&isonline="+isonline;
+//     console.log(url);
+//     $.get(url, function(result){
+//       console.log(result);
+
+//       for (var i = 0;i<result.length;i++) {
+//         value = result[i];
+//         selectedUserDic[value['id']]=value['nickname'];
+//       }
+//       showSelectedUser(); 
+//     });
+// }
+//根据jingqingid获取派送列表
+function getPaisong(jingqingid){  
+  url = "/Api/Paisong/Jingqing?jingqingid="+jingqingid;
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      for (var i = 0;i<result.length;i++) {
+        value = result[i];
+        selectedUserDic[value['user']['id']]=value['user']['nickname'];
+      }
+      showSelectedUser(); 
+    });
+}
+//用户marker点击
+function markerUserClick(e) {
+  console.log(e.target.content);
+  userinfoShow(e.target.content);
+  // infoWindow.setContent(e.target.content);
+  // infoWindow.open(map, e.target.getPosition());
+}
+//警情marker点击
+function markerJingqingClick(e) {
+  console.log(e.target.content);
+  currentjingqing = e.target.content;
+  jingqingclick(-1,currentjingqing);
+  // jingqinginfoShow(e.target.content);
+}
+
+
+
+function selectall(){
+    $("tr input[type=checkbox]").prop("checked","checked");
+  }
+  function unselectall(){
+    $("tr input[type=checkbox]").removeAttr("checked");
+  }
+//增加警情
+function addjingqing(){
+  var url = "/Api/Jingqing/Add?"
+  +"&title="+$("#title").val()
+  +"&content="+$("#c-content").val()
+  +"&address="+$("#address").val()
+  +"&type1="+$("#type1").val()
+  +"&type2="+$("#type2").val()
+  +"&type3="+$("#type3").val()
+  +"&image="+$("#image").val()
+  +"&video="+$("#video").val()
+  +"&lng="+$("#lng").val()
+  +"&lat="+$("#lat").val()
+  +"&paichusuo="+$("#paichusuo").val();
+  console.log(url);
+  $.get(url, function(result){
+      console.log(result);
+      currentjingqing = -1;
+      // $("#title").text("标题：");
+      // $("#content").text("内容：");
+      alert(result.msg);
+      log.info(result.msg);
+      // getJingqingClear();
+      // alert("派送完成！");
+  });
+}
+
+//派送
+function paisong(){
+  // if(currentjingqing<0){
+  //   alert("请选择警情");
+  //   return;
+  // }
+  var userids = "";
+  console.log(selectedUserDic);
+  for (var key in selectedUserDic) {
+  　　var item = selectedUserDic[key];
+    userids += key+",";
+  }
+
+  var url = "/Api/Paisong/Add?"
+  +"&jingqing_id="+currentjingqing['id']
+  +"&userids="+userids;
+  console.log(url);
+  $.get(url, function(result){
+      console.log(result);
+      currentjingqing = -1;
+      // $("#title").text("标题：");
+      // $("#content").text("内容：");
+      log.info(result.msg);
+  });
+}
+
+
+
+
+function jingqingToggle(){
+  $("#jingqingliebiao").toggle();
+}
+function peopleToggle(){
+  $("#userliebiao").toggle();
+}
+function getJingqingClear(){  
+  
+  map.clearMap();
+  // showMapUser();
+  getJingqing();
+}
+function getPeopleClear(){
+  map.clearMap();
+  showMapJingqing();
+  getPeople();
+}
+//查询警情
+function getJingqing(){    
+  // $("#peoplecheck").text("选择人员");
+  // $("#th1").text("标题");
+  // $("#th2").text("内容");
+  lngmin = map.getBounds().getSouthWest( ).getLng( );
+  latmin = map.getBounds().getSouthWest( ).getLat( );
+  lngmax = map.getBounds().getNorthEast( ).getLng( );
+  latmax = map.getBounds().getNorthEast( ).getLat( );
+  type1 = $("#jingqingtype1").val();
+  title = $("#jingqingtitle").val();
+  jingqingstate = $("#jingqingstate").val();
+  mapin = $("#jingqingmapin").is(':checked');
+
+  url = "/Api/Jingqing/Index?lngmin="+lngmin+"&latmin="+latmin+"&lngmax="+lngmax+"&latmax="+latmax
+  +"&type1="+type1+"&title="+title+"&mapin="+mapin+"&state="+jingqingstate;
+  console.log(url);
+  $.get(url, function(result){
+    console.log(result);
+    jingqings = result;
+    //map.clearMap( );
+    showListJingqing();
+    showMapJingqing();
+    // showMapUser();
+    // showListUser();
+  });
+}
+//把时间戳转为为普通日期格式
+function getLocalTime(nS) {     
+   return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');     
+}
+
+//列表显示警情
+function showListJingqing(){
+  result=jingqings;
+  $("#jingqinglist").empty();
+  for (var i = 0;i<result.length;i++) {
+    var value = result[i];
+    if(value.state == "已完结"){
+      $("#jingqinglist").append("<tr onclick='window.event.cancelBubble=true;jingqingclick("+i+",0)'><td>"+value.title+"</td><td>"+getLocalTime(value.createtime)+"</td><td>"+value.state+"</td><td>"+value.result+"</td><td>"
+      +""
+      +"</td></tr>");
+    }else{
+      $("#jingqinglist").append("<tr onclick='window.event.cancelBubble=true;jingqingclick("+i+",0)'><td>"+value.title+"</td><td>"+getLocalTime(value.createtime)+"</td><td>"+value.state+"</td><td>"+value.result+"</td><td>"
+      +""
+      +"<u  style='margin-left:5px;' onclick='window.event.cancelBubble=true;jingqingcomplete("+value.id+")'>完结</u></td></tr>");
+    } 
+    
+    //console.log(value);
+  } 
+}
+
+//时间戳转换方法    date:时间戳数字
+function formatDate(date) {
+  var date = new Date(date);
+  var YY = date.getFullYear() + '-';
+  var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+  var DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+  var hh = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+  var mm = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+  var ss = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+  return YY + MM + DD +" "+hh + mm + ss;
+}
+//地图显示警情
+function showMapJingqing(){
+  result=jingqings;
+  
+  for (var i = 0;i<result.length;i++) {
+    var value = result[i];
+    if(value['type1']=="警情联动"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/event.png',  // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }else{
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/event1.png',  // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    var marker = new AMap.Marker({
+      position: [value.lng, value.lat],
+      title: value.title,
+      icon:icon
+    });
+    //给marker添加点击事件
+    marker.content=value;
+    marker.on('click', markerJingqingClick);
+    map.add(marker);
+    marker.setLabel({
+      offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+      content: value.title, //设置文本标注内容
+      direction: 'bottom' //设置文本标注方位
+    });
+    markers.push(marker);
+  } 
+   //  $("#title").text(jingqings[0]['title']);
+   // $("#content").text(jingqings[0]['content']);   
+   
+}
+
+
+
+//根据警情获取派送的人员
+function getPeople(jingqingid){
+
+  url = "/Api/Paisong/Jingqing?jingqingid="+jingqingid;
+  console.log(url);
+  $.get(url, function(result){
+    console.log(result);
+    users = result;
+    showMapUser();  
+  });
+}
+
+//地图上显示人员
+function showMapUser(){
+  userlist = users;
+  for (var i = 0;i<userlist.length;i++) {
+    var value = userlist[i];
+    var online = "offline";
+    if(value.state =="执勤")online = "online";
+    //console.log(value);
+    // 创建 AMap.Icon 实例：
+    if(value.type == "警察"&&value.state=="空闲"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/jingcha1.png',  // Icon的图像
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    if(value.type == "警察"&&value.state=="执勤"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/jingcha.png',  // Icon的图像
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    if(value.type == "保安"&&value.state=="空闲"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/baoan1.png',  // Icon的图像
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    if(value.type == "保安"&&value.state=="执勤"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/baoan.png',  // Icon的图像
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+
+    var marker = new AMap.Marker({
+      position: [value.lng, value.lat],
+      offset: new AMap.Pixel(-10, -10),
+      title: value.name,
+      icon: icon
+    });
+    marker.content=value;
+    marker.on('click', markerUserClick);
+    map.add(marker);
+    marker.setLabel({
+      offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+      content: value.nickname,
+      direction: 'bottom' //设置文本标注方位
+    });    
+    //步行导航
+    var walking = new AMap.Walking({
+        map: map,
+    }); 
+    //根据起终点坐标规划步行路线
+    walking.search([value.lng, value.lat], [currentjingqing['lng'], currentjingqing['lat']], function(status, result) {
+        // result即是对应的步行路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_WalkingResult
+        if (status === 'complete') {
+            log.success('绘制步行路线完成')
+        } else {
+            log.error('步行路线数据查询失败' + result)
+        } 
+    });        
+  } 
+}
+//列表上派送列表
+function showListPaisong(){
+  $("#userpanel").show();
+  userlist = paisongs;
+  $("#userlist").empty();
+  for (var i = 0;i<userlist.length;i++) {
+    var value = userlist[i];
+    var online = "offline";
+    if(value.state =="执勤")online = "online";
+    
+    if(value.state == "已完结"){
+      $("#userlist").append("<tr onclick='paisonginfoShow("+i+")' class='"+online+"'><td>"+value.user.nickname+
+        "</td><td>"+value.state+"</td><td>"+value.result+"</td><td>"+value.score+
+        "</td><td>"+
+      "<u class='padd3' onclick='window.event.cancelBubble=true;guiji("+value.id+")'>轨迹</u></td></tr>");
+    }else{
+      $("#userlist").append("<tr onclick='paisonginfoShow("+i+")' class='"+online+"'><td>"+value.user.nickname+
+        "</td><td>"+value.state+"</td><td>"+value.result+"</td><td>"+value.score+
+        "</td><td>"+
+      "<u class='padd3' onclick='window.event.cancelBubble=true;guiji("+value.id+")'>轨迹</u><u class='padd3' onclick='window.event.cancelBubble=true;jiangli("+value.id+")'>完结</u></td></tr>");
+    }
+    
+    //console.log(value);          
+  } 
+}
+
+//派送反馈对话框显示
+function paisonginfoShow(i){
+  paisong=paisongs[i];
+  $("#paisonginfotime").text(paisong['fankuitime']);
+  $("#paisonginfoname").text(paisong['user']['nickname']);
+  $("#paisonginfoaddress").text(paisong['jingqing']['address']);
+  $("#paisonginfocontent").text(paisong['fankui']);
+  $("#paisonginfoimage").attr("src",paisong['image']);
+  $("#paisonginfo").show();
+}
+//根据paisongid奖励
+function jiangli(paisongid){ 
+  currentpaisongid =paisongid;
+$("#paisongcomplete").show(); 
+  
+
+  
+}
+//显示完结对话框  
+function jiangliApi(){
+  
+var result = $("#completecontnt").val();
+var score = $("#completescore").val();
+  if(result && score >=0){
+    url = "/Api/Paisong/Jiangli?paisongid="+currentpaisongid+"&result="+result+"&score="+score;
+    console.log(url);
+    $.get(url, function(result){
+      alert(result['msg']);
+    });
+    $("#paisongcomplete").hide();
+    getPaisong(currentjingqing["id"]);
+   }else{
+      alert("输入错误");
+   }
+   
+
+  
+}
+//派送反馈对话框隐藏
+function paisonginfoHide(){
+  
+  $("#paisonginfo").hide();
+}//派送列表对话框隐藏
+function userpanelHide(){
+  // $("#paisonginfo").hide();
+  $("#userpanel").hide();
+}
+//派送反馈对话框隐藏
+function paisonginfoHide(){  
+  $("#paisonginfo").hide();
+}
+//警情完结对话框隐藏
+function paisongcompleteHide(){  
+  $("#paisongcomplete").hide();
+}
+
+//警情历史单击警情
+function jingqingclick(i,cq){
+  //map.clearMap();
+  if(i>=0){
+    currentjingqing = jingqings[i];
+  }else{
+    currentjingqing = cq;  
+  }
+  
+  console.log(currentjingqing);
+  //showJingqing(currentjingqing,i)
+  var lng = currentjingqing['lng']; //经度范围[121.138398, 121.728226]
+  var lat = currentjingqing['lat']; //纬度范围[30.972688, 31.487611]
+  map.setCenter([lng, lat]); //设置地图中心点
+  map.setZoom(15); //设置地图层级
+  getPaisong(currentjingqing["id"]);
+} 
+//警情历史根据警情id搜搜派送
+function getPaisong(jingqingid){
+  url = "/Api/Paisong/Jingqing?jingqingid="+jingqingid;
+  console.log(url);
+  $.get(url, function(result){
+    console.log(result);
+    paisongs = result;
+    showListPaisong();  
+  });
+}
+
+//地图显示单个警情
+function showJingqing(value,i){
+  if(value['type1']=="警情联动"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/event.png',  // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }else{
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/event1.png',  // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    var marker = new AMap.Marker({
+      position: [value.lng, value.lat],
+      title: i,
+      icon:icon
+    });
+    marker.content=value;
+    marker.on('click', markerJingqingClick);
+    map.add(marker);
+    marker.setLabel({
+      offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+      content: value.title, //设置文本标注内容
+      direction: 'bottom' //设置文本标注方位
+    });
+    markers.push(marker);
+}
+
+//派送详情点击
+function userclick(id){
+  //根据警情id和userid获取派送反馈详情
+  url = "/Api/Paisong/Find?id="+id;
+  console.log(url);
+  $.get(url, function(result){
+    console.log(result);
+    paisonginfoShow(result);      
+  });
+}
+
+
+//警情完结
+function jingqingcomplete( id ){
+  var content = prompt("请输入完结陈述","已完结");
+  if(content){
+    url = "/Api/Jingqing/Complete?jingqingid="+id+"&content="+content;
+    console.log(url);
+    $.get(url, function(result){
+      alert(result['msg']);
+      getJingqing();
+    });
+   }
+}
+//轨迹电机
+  function locationclick(i){
+    // stopAnimation();
+    // map.clearMap();
+    value = locations[i];
+    var marker = new AMap.Marker({
+      position: [value.lng, value.lat],
+      title: "-",
+    });
+    map.add(marker);
+  }
+//根据警情id和userid获取定位列表
+function guiji(id){
+  $("#locationpanel").show();
+  
+  url = "/Api/Location/index?paisong_id="+id;
+  console.log(url);
+  lineArr = Array();
+  map.clearMap();
+  $.get(url, function(result){
+    console.log(result);
+    locations = result;
+    for (var i = 0;i<result.length;i++) {
+      lineArr[i] = Array();
+      lineArr[i][0] = result[i]['lng'];
+      lineArr[i][1] = result[i]['lat'];
+    value = result[i];
+         $("#locationlist").append("<tr onclick='locationclick("+i+")'><td>"+value.address+"</td><td>"+value.lng+"</td><td>"+value.lat+"</td><td>"+value.time+"</td></tr>");        
+    } 
+    //console.log(lineArr);
+    var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/baoan.png',  // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    marker = new AMap.Marker({
+      map: map,
+      position: [120.971,28.12892],
+      icon: icon,
+      offset: new AMap.Pixel(-25, -25),
+      autoRotation: false,
+    });
+    marker.on('moving', function (e) {
+    passedPolyline.setPath(e.passedPath);
+});
+    //绘制轨迹
+    var polyline = new AMap.Polyline({
+        map: map,
+        path: lineArr,
+        showDir:true,
+        strokeColor: "#28F",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 6,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline = new AMap.Polyline({
+      map: map,
+      // path: lineArr,
+      strokeColor: "#AF5",  //线颜色
+      // strokeOpacity: 1,     //线透明度
+      strokeWeight: 6,      //线宽
+      // strokeStyle: "solid"  //线样式
+    });
+    map.setFitView();
+    startAnimation();
+      
+  });
+}
+
+function startAnimation () {
+    marker.moveAlong(lineArr, 2000);
+}
+
+function pauseAnimation () {
+    marker.pauseMove();
+}
+
+function resumeAnimation () {
+    marker.resumeMove();
+}
+
+function stopAnimation () {
+    marker.stopMove();
+}
+
+function getbounds(e){
+if($('#jigouselect').val()=="all"){
+    //map.clearMap( );
+    getPeople();
+  }
+}
+
+</script>

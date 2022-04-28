@@ -1,0 +1,217 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-title" class="form-control" name="row[title]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            <select  id="c-type" class="form-control selectpicker" name="row[type]">
+                {foreach name="typeList" item="vo"}
+                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">派出所:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-paichusuo_id" data-rule="required" data-source="paichusuo/index" class="form-control selectpage" name="row[paichusuo_id]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-content" class="form-control editor" rows="5" name="row[content]" cols="50"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">类别:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-groups" class="form-control" name="row[groups]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">单位:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-organs" class="form-control" name="row[organs]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">部门:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-departs" class="form-control" name="row[departs]" type="text">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <ul id="treeDemo" class="ztree"></ul>
+<link rel="stylesheet" href="/css/bootstrapztree.css" type="text/css">  
+  <script type="text/javascript" src="/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="/js/jquery.ztree.excheck.js"></script>
+  <script type="text/javascript" src="/js/jquery.ztree.exedit.js"></script>
+<SCRIPT type="text/javascript">
+// check事件
+function zTreeOnCheck(event, treeId, treeNode) {  
+    var groups = ",";
+    var organs = ",";
+    var departs = ",";      
+    console.log("treeNode.tId:"+treeNode.tId);
+    console.log("treeNodeid:"+treeNode.id);
+    var checkedNodes = $treer.getCheckedNodes();
+    console.log(checkedNodes); 
+    for(var i=0;i<checkedNodes.length;i++){
+        thisid = checkedNodes[i]['id']
+        if(thisid>=2000){
+            a = thisid-2000;
+            organs=organs+a+","  ;  
+        }else if(thisid>=1000){
+            a = thisid-1000;
+            groups=groups+a+","  ;  
+        }else{
+            a = thisid;
+            departs=departs+a+","  ;  
+        }
+    }
+    $("#c-groups").val(groups);
+    $("#c-organs").val(organs);
+    $("#c-departs").val(departs);       
+}   
+ 
+        
+var setting = {
+    view: {
+        addHoverDom: addHoverDom,
+        removeHoverDom: removeHoverDom,
+        selectedMulti: false
+    },
+    check: {
+        enable: true,
+        chkboxType: {"Y":"s","N":"s" }
+    },
+    data: {
+        simpleData: {
+            enable: true
+        }
+    },
+    callback:{
+      onCheck:zTreeOnCheck,
+    },
+    edit: {
+        enable: false
+    }
+};
+
+var zNodes =[
+    {id:1001, pId:0, name:"警察"},
+    {id:1002, pId:0, name:"保安"}
+    ];
+
+$(document).ready(function(){
+     getOrgan();
+});
+
+grouplist = Array();
+organlist = Array();
+departlist = Array();    
+var j = 0;
+
+function getOrgan(){
+    url = "/Api/Rule/Organ";
+    console.log(url);  
+$.ajax({
+    url: url,
+    type: "get",
+    dataType: "json",
+    ContentType: "application/json; charset=utf-8",
+    async: false,
+    success: function (data) {
+        j = 2;
+        organlist = data;
+        for (var i = 0;i<data.length;i++) {
+        // console.log(data[i]);
+        zNodes[j] = Array();  
+        zNodes[j]["id"]=data[i]["id"]+2000;
+        zNodes[j]["pId"]=data[i]["type_id"]+1000;
+        zNodes[j]["name"]=data[i]["name"];
+        // if(zNodes[j]["id"] == 2002)zNodes[j]["checked"]=true;
+        j++;
+        } 
+        getDepart();
+    },
+    error: function () {
+        alert("zNodes");
+    }
+});       
+}
+
+
+function getDepart(){
+    url = "/Api/Rule/Depart";
+    console.log(url);
+$.ajax({
+url: url,
+type: "get",
+dataType: "json",
+ContentType: "application/json; charset=utf-8",
+async: false,
+success: function (data) {
+departlist = data;
+    for (var i = 0;i<data.length;i++) {
+        zNodes[j] = Array();  
+        zNodes[j]["id"]=data[i]["id"];
+        zNodes[j]["pId"]=data[i]["organ_id"]+2000;
+        zNodes[j]["name"]=data[i]["name"];
+        // if(groupids.indexOf(zNodes[j]["id"]) == 6)zNodes[j]["checked"]=true;
+        j++;        
+    } 
+    console.log(zNodes);
+    $treer = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    $treer.expandAll(true);
+},
+error: function () {
+    alert("zNodes");
+}
+});    
+}
+// function seend(){
+//     var sNodes = $treer.getCheckedNodes();
+//         console.log(sNodes);
+// }
+
+var newCount = 1;
+function addHoverDom(treeId, treeNode) {
+    // treeNode.tId = treeNode.id;
+    console.log(treeNode);
+    var sObj = $("#" + treeNode.tId + "_span");
+    if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+    var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+        + "' title='add node' onfocus='this.blur();'></span>";
+    sObj.after(addStr);
+    var btn = $("#addBtn_"+treeNode.tId);
+    if (btn) btn.bind("click", function(){
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+        return false;
+    });
+};
+function removeHoverDom(treeId, treeNode) {
+    $("#addBtn_"+treeNode.tId).unbind().remove();
+};
+</SCRIPT>
+       
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

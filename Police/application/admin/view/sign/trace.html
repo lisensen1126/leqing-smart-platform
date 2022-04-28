@@ -1,0 +1,292 @@
+<link rel="stylesheet" href="/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>    
+    <script type="text/javascript" src="/myplugs/js/plugs.js"></script>
+    <style type="text/css">
+      div{
+        height: 100%;
+      }
+    </style>
+        <!-- content start -->
+<div class="admin-content" style="overflow-y: hidden;margin: -10px;" id="main">
+  <script type="text/javascript">
+    $(document).ready(function(){
+      // alert($(window).height()); //浏览器当前窗口可视区域高度
+      $("#main").css("height",$(window).height());
+      $("#think_page_trace").css("height",10);
+    });
+    
+  </script>
+  <div class="am-u-sm-12" style="height: 100%;padding: 0px;">
+    <style type="text/css">
+      .amap-marker-label{
+        height: 20px;
+      }
+    </style>
+
+    
+<!--  <hr> -->
+    <div  style="height: 100%;">
+      <div class="am-u-sm-12"  style="height: 100%;position: relative;float: left;padding: 0px;">
+        <!-- <div id="container" style="width: 80%;height: 50rem;"  ></div> -->
+        <div id="container" style="width: 100%; height: 100%;position: absolute;" class="map" style=""></div>
+      <!--   <div   style="position: absolute;float: left;">
+          <span class="  xuanfubtn" onclick="locationlistShow()" >轨迹列表</span>
+        </div> -->
+        <<!-- div class="row xuanfubtnyou1"  style="height: auto; position: absolute;float: right;left:120px;top:10px;background-color: #3368C4;">           
+              <span  onclick="locationlistShow()" class="btn btn-primary " >轨迹列表 
+              </span>
+              
+        </div> -->
+        <div class="am-panel am-panel-default xuanfuleft"  onclick="locationlistShow()" style="position: absolute;float: left;left: 60px;z-index: 100;height: 40px;">
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}" style="background-color: #3368C4;color: white;height: auto;">轨迹列表</div>
+        </div>
+        <!-- 轨迹表 -->
+        <div class="am-panel am-panel-default xuanfuleft" id="locationpanel"  style="position: absolute;float: left;left: 60px;z-index: 200;height: 440px;">
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}" style="background-color: #3368C4;color: white;height: auto;">轨迹列表<span onclick="locationlistHide()" class="am-icon-close am-fr" ></span></div>
+          <script type="text/javascript">
+            function locationlistHide(){$("#locationpanel").hide();}
+            function locationlistShow(){$("#locationpanel").show();}
+          </script>
+          <div class="am-panel-bd am-collapse am-in" id="collapse-panel-2" style="padding: 0px;height: 400px;font-size: 8px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 400px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-tabs-bd" style="height: auto;">
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1" >
+                    <table class="am-table font8">
+                      <!-- <table class="am-table am-table-striped am-table-hover table-main"> -->
+                      <thead>
+                      <tr>
+                        <th class="table-type" id="th2">地址</th>
+                        <th class="table-type" id="th2">经度</th>
+                        <th class="table-type" id="th2">纬度</th>
+                        <th class="table-type" id="th2">时间</th>
+                      </tr>
+                      </thead>
+                      <tbody id="locationlist">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 轨迹表 -->
+
+<!--         <div id="panel"></div>-->
+    <div style="position: absolute;float: right;right: 60px;z-index: 300;height: 40px;">    
+      <div class="input-item"  >
+          <input type="button" class="btn btn-primary" value="开始动画" id="start" onclick="startAnimation()"/>
+          <input type="button" class="btn btn-primary" value="暂停动画" id="pause" onclick="pauseAnimation()"/>
+      </div>
+      <div class="input-item">
+          <input type="button" class="btn btn-primary" value="继续动画" id="resume" onclick="resumeAnimation()"/>
+          <input type="button" class="btn btn-primary" value="停止动画" id="stop" onclick="stopAnimation()"/>
+      </div>
+      <div class="input-item">
+          <input type="text"  style="width: 80px;" value="2000" id="speed" "/>
+          <input type="button" class="btn btn-primary" value="速度设置"  onclick="speedset()"/>
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+  <!-- footer start -->
+<!--     <include file="/footer" />
+-->    <!-- footer end -->
+  
+
+</div>
+<!-- content end -->
+
+  <script type="text/javascript">
+    //添加编辑弹出层
+    function updatePwd(title, id) {
+      $.jq_Panel({
+        title: title,
+        iframeWidth: 500,
+        iframeHeight: 300,
+        url: "updatePwd.html"
+      });
+    }
+  </script>
+  <script src="/js/layui.js"></script>
+  <script>
+    //JavaScript代码区域
+    layui.use('element', function() {
+      var element = layui.element;
+
+    });
+  </script>
+
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.MouseTool,AMap.Geocoder"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.MouseTool,AMap.Walking"></script>
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<!--   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.Walking"></script> -->
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>  
+<script type="text/javascript" src="/js/my.js"></script>
+<!-- <script type="text/javascript" src="/js/trace.js"></script>   -->
+<script type="text/javascript">
+  var jingqings = [];
+var users = [];
+var locations = [];
+var paisongs = [];
+var selectedusers = [];//选中的人员id列表
+var selectedUserDic = new Array();//选中的人员字典
+var peopleShow = 1;
+var markers = [];
+var currentjingqing = -1;//当前选中的警情id
+var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+var speednow = 2000;
+//地图初始化
+var map = new AMap.Map("container", {
+  resizeEnable: true,
+  center: [120.986678, 28.112493],//地图中心点
+  zoom: 13 //地图显示的缩放级别
+}); 
+var mouseTool = new AMap.MouseTool(map);
+map.clearMap( ); 
+guiji(getQueryVariable("sign_id")); 
+map.on('click',function(e){
+  console.log(e.lnglat);
+  document.getElementById('lng').value=e.lnglat.lng;
+  document.getElementById('lat').value=e.lnglat.lat;
+  regeoCode(e.lnglat);
+    // document.getElementById('coordinate').value = e.lnglat;
+    // regeoCode();
+})  ;
+var geocoder = new AMap.Geocoder({
+    city: "0577", //城市设为北京，默认：“全国”
+    radius: 1000 //范围，默认：300
+});
+
+var marker = new AMap.Marker();;
+function regeoCode(lnglat) {    
+    geocoder.getAddress(lnglat, function(status, result) {
+        if (status === 'complete'&&result.regeocode) {
+            var address = result.regeocode.formattedAddress;
+            // alert(address);
+            document.getElementById('address').value=address;
+        }else{
+            log.error('根据经纬度查询地址失败')
+        }
+    });
+}
+
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+
+//时间戳转换方法    date:时间戳数字
+function formatDate(date) {
+  var date = new Date(date);
+  var YY = date.getFullYear() + '-';
+  var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+  var DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+  var hh = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+  var mm = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+  var ss = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+  return YY + MM + DD +" "+hh + mm + ss;
+}
+
+  function locationclick(i){
+    // stopAnimation();
+    // map.clearMap();
+    value = locations[i];
+    var marker = new AMap.Marker({
+      position: [value.lng, value.lat],
+      title: "-",
+    });
+    map.add(marker);
+  }
+
+
+//根据警情id和userid获取定位列表
+function guiji(id){
+  
+  url = "/Api/Location/sign?sign_id="+id;
+  console.log(url);
+  lineArr = Array();
+  map.clearMap();
+  $.get(url, function(result){
+    console.log(result);
+    for (var i = 0;i<result.length;i++) {
+      locations = result;
+      lineArr[i] = Array();
+      lineArr[i][0] = result[i]['lng'];
+      lineArr[i][1] = result[i]['lat'];
+      value = result[i];
+         $("#locationlist").append("<tr onclick='locationclick("+i+")'><td>"+value.address+"</td><td>"+value.lng.slice(0,5)+"</td><td>"+value.lat.slice(0,4)+"</td><td>"+value.time+"</td></tr>");        
+       
+    } 
+    //console.log(lineArr);
+    var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/baoan.png',  // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    marker = new AMap.Marker({
+      map: map,
+      position: [120.971,28.12892],
+      icon: icon,
+      offset: new AMap.Pixel(-25, -25),
+      autoRotation: false,
+    });
+    marker.on('moving', function (e) {
+    passedPolyline.setPath(e.passedPath);
+});
+    //绘制轨迹
+    var polyline = new AMap.Polyline({
+        map: map,
+        path: lineArr,
+        showDir:true,
+        strokeColor: "#28F",  //线颜色
+        // strokeOpacity: 1,     //线透明度
+        strokeWeight: 6,      //线宽
+        // strokeStyle: "solid"  //线样式
+    });
+    var passedPolyline = new AMap.Polyline({
+      map: map,
+      // path: lineArr,
+      strokeColor: "#AF5",  //线颜色
+      // strokeOpacity: 1,     //线透明度
+      strokeWeight: 6,      //线宽
+      // strokeStyle: "solid"  //线样式
+    });
+    map.setFitView();
+    startAnimation();
+      
+  });
+}
+
+function startAnimation () {
+    marker.moveAlong(lineArr, speednow);
+}
+function speedset () {
+  speednow = $("#speed").val();
+  startAnimation ();
+}
+
+function pauseAnimation () {
+    marker.pauseMove();
+}
+
+function resumeAnimation () {
+    marker.resumeMove();
+}
+
+function stopAnimation () {
+    marker.stopMove();
+}
+
+</script>

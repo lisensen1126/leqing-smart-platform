@@ -1,0 +1,207 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>后台管理系统</title>
+  <meta name="description" content="这是一个 table 页面">
+  <meta name="keywords" content="table">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="/Public/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="/Public/i/app-icon72x72@2x.png">
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+<!-- <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+ -->  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="/Public/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="/Public/css/admin.css">
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+<!-- header start -->
+<include file="Public/header" />
+<!-- header end -->
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <include file="Public/sidebar" />
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">{$item}管理</strong> / <small> {$item}增加</small></div>
+      </div>
+
+      <hr>
+
+      
+
+      <div class="am-g">
+        <div class="am-u-sm-12">
+          <form method="post" class="am-form"  >
+            <div class="am-u-sm-4">
+            <label for="title">标题:</label>
+            <input type="text" name="title">
+            <label for="content">内容:</label>
+            <input type="text" name="content">
+            <label for="address">地址:</label>
+            <input type="text" name="address">
+            
+            <label for="type">类别:</label>
+            <select name ="type">
+              <option value="一般">一般</option>
+              <option value="紧急">紧急</option>
+            </select>
+            <label for="lng">经度:</label>
+              <input type="text" name="lng" id="lng">
+              <label for="lat">纬度:</label>
+              <input type="text" name="lat" id="lat">
+              <div class="am-cf">
+              <input type="submit" name="" value="保存" class="am-btn am-btn-primary am-btn-sm am-fl">
+            </div>
+            </div>
+            <div class="am-u-sm-8" style=" height: 500px;">
+              <div class="map" style="float: left;"  class="am-u-sm-6">
+                <div id="container" ></div>
+                
+                
+            </div>  
+            </div><br>
+
+
+ 
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!--引入高德地图JSAPI -->
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.Geocoder,AMap.Autocomplete,AMap.PlaceSearch"></script>
+<!--引入UI组件库（1.0版本） -->
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/demos/js/liteToolbar.js"></script>
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+<script type="text/javascript" src="https://a.amap.com/jsapi_demos/static/demo-center/js/underscore-min.js" ></script>
+<script type="text/javascript" src="https://a.amap.com/jsapi_demos/static/demo-center/js/backbone-min.js" ></script>
+<script type="text/javascript" src='https://a.amap.com/jsapi_demos/static/demo-center/js/prety-json.js'></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+
+            <script type="text/javascript">
+    var map = new AMap.Map("container", {
+      center: [114.50094310058593, 36.614396499837056],//地图中心点
+      zoom:13,
+      resizeEnable: true
+    });
+ 
+    //输入提示
+    var autoOptions = {
+        input: "tipinput"
+    };
+    var auto = new AMap.Autocomplete(autoOptions);
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });
+ 
+    //点击地图上的点标记
+ 
+    AMap.event.addListener(placeSearch,"markerClick",function(e) {
+ 
+        $('#coordinate').val(e.data.location);
+        $('#jing').val(e.data.location);
+ 
+        $('#address').val(e.data.name);
+ 
+    });
+ 
+ 
+    //构造地点查询类
+    AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name);  //关键字查询查询
+    }
+ 
+ 
+    var geocoder = new AMap.Geocoder({
+        city: "全国", //城市设为北京，默认：“全国”
+    });
+ 
+    var marker = new AMap.Marker();
+    map.getAllOverlays();
+ 
+    var marker = new AMap.Marker();
+    function regeoCode() {
+ 
+        var lnglat  = document.getElementById('coordinate').value.split(',');
+        map.add(marker);
+        marker.setPosition(lnglat);
+ 
+        geocoder.getAddress(lnglat, function(status, result) {
+            if (status === 'complete'&&result.regeocode) {
+                var address = result.regeocode.formattedAddress;
+                document.getElementById('address').value = address;
+            }else{
+                //log.error('根据经纬度查询地址失败')
+            }
+        });
+    }
+ 
+    map.on('click',function(e){
+      console.log(e.lnglat);
+      document.getElementById('lng').value=e.lnglat.lng;
+      document.getElementById('lat').value=e.lnglat.lat;
+        document.getElementById('coordinate').value = e.lnglat;
+        regeoCode();
+    })
+    document.getElementById("regeo").onclick = regeoCode;
+    document.getElementById('coordinate').onkeydown = function(e) {
+        if (e.keyCode === 13) {
+            regeoCode();
+            return false;
+        }
+        return true;
+    };
+ 
+ 
+ 
+</script>
+            
+            
+            
+          
+            <br>
+            
+          </form>
+        </div>
+
+      </div>
+    </div>
+    <!-- footer start -->
+    <include file="Public/footer" />
+    <!-- footer end -->
+    
+
+  </div>
+  <!-- content end -->
+</div>
+
+<a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="/Public/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="/Public/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="/Public/js/amazeui.min.js"></script>
+<script src="/Public/js/app.js"></script>
+</body>
+</html>

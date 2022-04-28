@@ -1,0 +1,1545 @@
+<link rel="stylesheet" href="/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/js/my.js"></script>
+    <script type="text/javascript" src="/myplugs/js/plugs.js"></script>
+    <script type="text/javascript">
+    top.window.$("ul.nav-addtabs li.active").siblings().find(".close-tab").trigger("click");
+  </script>
+    <style type="text/css">
+      div{
+        height: 100%;
+      }
+    </style>
+    <style>
+        html, body, #container {
+            height: 100%;
+            width: 100%;
+        }
+
+        .content-window-card {
+          height: auto;
+            position: relative;
+            box-shadow: none;
+            bottom: 0;
+            left: 0;
+            width: auto;
+            padding: 0;
+        }
+
+        .content-window-card p {
+            height: 2rem;
+        }
+
+        .custom-info {
+            border: solid 1px silver;
+        }
+
+        div.info-top {
+            position: relative;
+            background: none repeat scroll 0 0 #F9F9F9;
+            border-bottom: 1px solid #CCC;
+            border-radius: 5px 5px 0 0;
+            height: auto;
+        }
+
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+            height: auto;
+        }
+
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+
+            height: auto;
+        }
+
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+            height: auto;
+        }
+
+        div.info-middle {
+            font-size: 12px;
+            padding: 10px 6px;
+            line-height: 20px;
+            height: auto;
+        }
+
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+            height: auto;
+        }
+
+        span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+    </style>
+        <!-- content start -->
+<div class="admin-content" style="overflow-y: hidden;margin: -10px;" id="main">
+  <script type="text/javascript">
+    $(document).ready(function(){
+      // alert($(window).height()); //浏览器当前窗口可视区域高度
+      $("#main").css("height",$(window).height());
+      $("#think_page_trace").css("height",10);
+    });
+    
+  </script>
+  <div class="am-u-sm-12" style="height: 100%;padding: 0px;">
+   <!--  <div class="am-cf am-padding am-padding-bottom-0">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">{$item}管理</strong> / <small> {$item}列表</small></div>
+    </div> -->
+    <style type="text/css">
+      .amap-marker-label{
+        height: 20px;
+      }
+      .bottom-center{
+        height: auto;
+      }
+    </style>
+
+    
+<!--  <hr> -->
+    <div  style="height: 100%;">
+      <div class="am-u-sm-12"  style="height: 100%;position: relative;float: left;padding: 0px;">
+        <!-- <div id="container" style="width: 80%;height: 50rem;"  ></div> -->
+        <div id="container" style="width: 100%; height: 100%;position: absolute;" class="map" style=""></div>
+<!--         <div id="panel"></div>-->
+        <!-- <div   style="position: absolute;float: left;">
+          <a class=" am-icon-list xuanfubtn"  target="_blank" href="map"></a>
+        </div> -->
+        <div class="row xuanfubtnyou1"  style="height: auto; position: absolute;float: right;right: 20px;bottom: 0px;">           
+          <div class="btn-group dropup">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="am-icon-joomla" style="font-size: 40px;"></i> 
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                
+                  <li style="width: 60px;"><button  onclick="peopleToggle()" class="am-btn am-btn-default" style="width: 60px;height: 60px;font-size: 15px;"><i class="am-icon-user" style="font-size: 40px;"></i>  </button></li>
+              <li style="width: 60px;"><button  onclick="jingqingToggle()" class="am-btn am-btn-default" style="width: 60px;height: 60px;font-size: 15px;"><i class="am-icon-tasks" style="font-size: 40px;"></i>  </button></li>
+              <li style="width: 60px;"><button onclick="jingqingaddShow()" class="am-btn am-btn-default" style="width: 60px;height: 60px;font-size: 15px;"><i class="am-icon-plus" style="font-size: 40px;"></i>  </button></li>
+
+              <li  style="width: 60px;" class="am-divider"></li>
+              </ul>
+          </div>
+      </div>
+
+
+         <!-- 警情表 -->
+        <div class="am-panel am-panel-default xuanfuleft"  id="jingqingliebiao"  style="position: absolute;float: left;z-index: 9999;display: none;height: 440px;">
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}" style="background-color: #3368C4;color: white;height: auto;">警情列表<span onclick="jingqinglistHide()" class="am-icon-close am-fr" ></span></div>
+          <script type="text/javascript">
+  //用户对话框隐藏
+function jingqinglistHide(){
+  
+  $("#jingqingliebiao").hide();
+}
+</script>
+          <div class="am-panel-bd am-collapse am-in" id="collapse-panel-2" style="padding: 0px;height: 400px;font-size: 8px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 400px; padding: 0px;">         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-u-sm-12 font8"  style="height: 100px;padding: 2px;">
+                  <div class="am-u-sm-6 " style="height: auto;">
+                    <div class="am-form-group" style="height: auto;">
+                      <input  type="checkbox" id="jingqingmapin" name="地图内搜索" value="地图内搜索">地图内搜索
+                    </div>
+                  </div>
+                  <div class="am-u-sm-6 " style="height: auto;">
+                    <div class="am-form-group" style="height: auto;">
+                      <select name="type" id="jingqingtype1" style="font-size: 8px; height: 35px;" >
+                        <option value="">所有类别</option>
+                        <option value="警情联动">警情联动</option>
+                        <option value="调度指令">调度指令</option>
+                      </select>
+                    </div>
+                  </div>                  
+                  <div class="am-u-sm-12 font8" style="height: auto;">
+                    <div class="am-input-group am-input-group-sm">
+                      <input type="text" name="realname" id="jingqingtitle" class="am-form-field" placeholder="标题">
+                    <span class="am-input-group-btn ">
+                      <button class="am-btn am-btn-default" onclick="getJingqingClear()" type="button">搜索</button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="am-tabs-bd" style="height: auto;">
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table class="am-table font8">
+                      <!-- <table class="am-table am-table-striped am-table-hover table-main"> -->
+                      <thead>
+                      <tr>
+                        <th class="table-title" id="th1">标题</th>
+                        <th class="table-type" id="th2">地址</th>
+                        <th class="table-type" id="th2">时间</th>
+                      </tr>
+                      </thead>
+                      <tbody id="jingqinglist">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>                   
+            </div>
+          </div>
+        </div>
+        <!-- 警情表 -->
+        <!-- 人员记录 -->
+        <div class="am-panel am-panel-default xuanfuyou" id="userliebiao"  style="position: absolute;float: right;right:50px;z-index: 9999; height: 440px;display: none;font-size: 8px;">
+          <div id="panel1" class="am-panel-hd am-cf"data-am-collapse ="{target: '#collapse-panel-1'}" style="background-color: #3368C4;color: white;height: auto;">人员列表<span onclick="userlistHide()" class="am-icon-close am-fr" ></span></div>
+          <script type="text/javascript">
+  //用户对话框隐藏
+function userlistHide(){
+  
+  $("#userliebiao").hide();
+}
+</script>
+          <div class="am-panel-bd am-collapse am-in" id="collapse-panel-1" style="padding: 0px;height: 400px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 400px;width: 400px; padding: 0px;">
+         
+              <div class="am-tabs " data-am-tabs  >
+                <div class="am-u-sm-12 font8"  style="height: auto;padding: 2px;">
+                  <div class="am-u-sm-6 " style="height: auto;">
+                    <div class="am-form-group" style="height: auto;">
+                      <input  type="checkbox" id="usermapin" name="地图内搜索" value="地图内搜索">地图内搜索
+                    </div>
+                  </div>
+                  <div class="am-u-sm-6 " style="height: auto;">
+                    <div class="am-form-group"  style="height: auto;">
+                      <input  type="checkbox" id="isonline" >是否在线
+                    </div>
+                  </div>
+                  <div class="am-u-sm-6 " style="height: auto;">
+                    <div class="am-form-group" style="height: auto;">
+                      <select name="type" id="usertype" style="font-size: 8px; height: 35px;" >
+                        <option value="">所有类别</option>
+                        <option value="1">警察</option>
+                        <option value="2">保安</option>
+                      </select>
+                    </div>
+                  </div>
+                 
+                  <div class="am-u-sm-6 font8" style="height: auto;">
+                    <div class="am-input-group am-input-group-sm" style="height: auto;">
+                      <input type="text" name="realname" id="realname" class="am-form-field" placeholder="姓名">
+                    <span class="am-input-group-btn ">
+                      <button class="am-btn am-btn-default" onclick="getPeopleClear()" type="button">搜索</button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="am-tabs-bd"  style="height: auto;">
+                  <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+                    <table class="am-table font8">
+                      <!-- <table class="am-table am-table-striped am-table-hover table-main"> -->
+                      <thead>
+                      <tr>
+                        <th class="table-check"><!-- <input type="checkbox" /> --></th>
+                        <th class="table-title" id="th1">姓名</th>
+                        <th class="table-type" id="th2">职务</th>
+                        <th class="table-type" id="th2">状态</th>
+                      </tr>
+                      </thead>
+                      <tbody id="userlist">
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+                   
+            </div>
+          </div>
+        </div>
+        <!-- 人员记录 -->
+
+        <!-- 增加记录 -->
+        <div class="am-panel am-panel-default xuanfujingqingadd" id="jingqingaddpanel" hidden="true" style="height: 550px;width: 500px;position: absolute;float: left;z-index: 9999;font-size: 8px;">
+          <div class="am-panel-hd am-cf"  style="background-color: #3368C4;color: white;height: auto;"  >增加记录<span onclick="jingqingaddHide()" class="am-icon-close am-fr" ></span></div>
+          <div class="am-panel-bd am-collapse am-in" id="collapse-panel-3" style="padding: 0px;">
+            <div class="am-u-sm-3 " style="overflow-y: scroll;height: 500px;width: 500px; padding: 0px;">
+
+<div style="height: auto;"class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Type1')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">                  
+      <select  id="type1" class="form-control selectpicker" name="row[type1]">
+          {foreach name="type1List" item="vo"}
+              <option value="{$key}" {in name="key" value="警情联动"}selected{/in}>{$vo}</option>
+          {/foreach}
+      </select>
+
+  </div>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Type2')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+                  
+      <select  id="type2" class="form-control selectpicker" name="row[type2]">
+          {foreach name="type2List" item="vo"}
+              <option value="{$key}" {in name="key" value="一般"}selected{/in}>{$vo}</option>
+          {/foreach}
+      </select>
+
+  </div>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Type3')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+                  
+      <select  id="type3" class="form-control selectpicker" name="row[type3]">
+          {foreach name="type3List" item="vo"}
+              <option value="{$key}" {in name="key" value="需反馈"}selected{/in}>{$vo}</option>
+          {/foreach}
+      </select>
+
+  </div>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Type4')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+                  
+      <select  id="type4" class="form-control selectpicker" name="row[type4]">
+          {foreach name="type4List" item="vo"}
+              <option value="{$key}" {in name="key" value="民生"}selected{/in}>{$vo}</option>
+          {/foreach}
+      </select>
+
+  </div>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      <input id="title" class="form-control" name="row[title]" type="text">
+  </div>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+    <input id="c-content" class="form-control" name="row[content]" type="text">
+      <!-- <textarea id="c-content" class="form-control editor" rows="5" name="row[content]" cols="50"></textarea><br> -->
+  </div><br>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('State')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      
+      <div style="height: auto;" class="radio">
+      {foreach name="stateList" item="vo"}
+      <label for="row[state]-{$key}"><input id="row[state]-{$key}" name="row[state]" type="radio" value="{$key}" {in name="key" value="未派送"}checked{/in} /> {$vo}</label> 
+      {/foreach}
+      </div>
+
+  </div>
+</div><br><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Address')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      <input id="address" class="form-control" name="row[address]" type="text">
+  </div>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Lat')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      <input id="lat" class="form-control" name="row[lat]" type="text">
+  </div>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Lng')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      <input id="lng" class="form-control" name="row[lng]" type="text">
+  </div>
+</div><br>
+<div style="height: auto;" class="form-group">
+  <label class="control-label col-xs-12 col-sm-2">辖区</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      <select  id="paichusuo" class="form-control selectpicker" name="row[type4]">
+          {foreach name="paichusuoList" item="vo"}
+              <option value="{$vo.id}" >{$vo.name}</option>
+          {/foreach}
+      </select>
+  </div>
+</div><br>
+<div style="height: 60px;" class="form-group"  id="imagediv" >
+  <label class="control-label col-xs-12 col-sm-2">{:__('Image')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      <div style="height: auto;" class="input-group">
+        <input type="file" name="photo" id="photo" value="" placeholder="照片">
+        <input type="text" name="image" id="image"> <br><br>
+        <img id="jingqingaddimage" style="width: 150px;height: 100px;display: none;">
+      </div>
+  </div>
+</div><br>
+<div style="height: 60px;"  id="videodiv" >
+  <br><label class="control-label col-xs-12 col-sm-2">{:__('Videoimage')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      <div style="height: auto;" class="input-group">
+        <input type="file" name="photo2" id="photo2" value="" placeholder="照片">
+        <input type="text" name="video" id="video"> <br><br>
+        <video  id="jingqingaddvideo"  width="150" height="100" style="display: none;" controls>
+          <source id="video_path" src="" type="video/mp4" />
+          <embed width="320" height="240" src="/i/movie.swf" />
+        您的浏览器不支持Video标签。
+        </video>
+      </div>
+  </div>
+</div><br><br>
+<div style="height: auto;;">
+  <label class="control-label col-xs-12 col-sm-2">{:__('Result')}:</label>
+  <div style="height: auto;" class="col-xs-12 col-sm-8">
+      <input id="result" class="form-control" name="row[result]" type="text" value="-">
+  </div>
+  <script type="text/javascript">
+    
+  </script>
+</div><br>              
+                <!-- <div class="am-u-sm-12"  style="height: auto;"> 
+               <div class="am-u-sm-4">
+                <label for="title"  class=" am-form-label">标题:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <input type="text"   id="title" >
+                </div>   
+                </div>  
+                <div class="am-u-sm-12" style="height: auto;">          
+                <div class="am-u-sm-4"  >
+                <label for="content" >内容:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <textarea id="content" class="editor"></textarea>
+                </div>
+                </div>  
+                <div class="am-u-sm-12" style="height: auto;">
+                <div class="am-u-sm-4">
+                <label for="address">地址:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <input type="text" id="address">  
+                </div>
+                </div>  
+                <div class="am-u-sm-12" style="height: auto;">
+                <div class="am-u-sm-4">                
+                <label for="type1">类别:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <select id ="type1" style="font-size: 8px;">
+                  <option value="警情联动">警情联动</option>
+                  <option value="调度指令">调度指令</option>
+                </select>
+                </div>
+                <div class="am-u-sm-4">                
+                <label for="paichusuo">派出所:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <select id ="paichusuo" style="font-size: 8px;">
+                  <option value="柳市镇">柳市镇</option>
+                  <option value="北白象镇 ">北白象镇 </option>
+                  <option value="虹桥镇">虹桥镇</option>
+                  <option value="磐石镇">磐石镇</option>
+                  <option value="淡溪镇">淡溪镇</option>
+                  <option value="蒲岐镇">蒲岐镇</option>
+                </select>
+                </div>
+                </div>
+                <div class="am-u-sm-12" style="height: auto;">
+                <div class="am-u-sm-4">                
+                <label for="type2">类别:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <select id ="type2" style="font-size: 8px;">
+                  <option value="一般">一般</option>
+                  <option value="紧急">紧急</option>
+                </select>
+                </div>
+                </div>  
+                <div class="am-u-sm-12" style="height: auto;">
+                <div class="am-u-sm-4">
+                <label for="type3">签收方式:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <select id ="type3" style="font-size: 8px;">
+                  <option value="仅签收">仅签收</option>
+                  <option value="全环节反馈">全环节反馈</option>
+                </select>
+                </div>
+                </div>  
+                <div class="am-u-sm-12" style="height: auto;">
+                <div class="am-u-sm-4">
+                <label for="lng">经度:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <input type="text" name="lng" id="lng">
+                </div>
+                </div>  
+                <div class="am-u-sm-12" style="height: auto;">
+                <div class="am-u-sm-4">
+                <label for="lat">纬度:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <input type="text" name="lat" id="lat"> 
+                </div>
+                </div>
+                
+
+
+
+                <div class="am-u-sm-12" style="height: auto;">
+                <div class="am-u-sm-4">
+                <label for="lat">图片:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <img id="logo" class="ctn-uploadImg" src="" draggable="false">
+                <div id="licenseBox" class="ctn-licence">
+                    <input type="file" name="photo" id="photo" value="" placeholder="照片">
+                </div> 
+                <input type="hidden" name="image" id="image"> 
+                </div>
+                <div class="am-u-md-5" style="margin: 5px;">
+                    <img id="jingqingaddimage" style="width: 150px;height: 100px;">
+                </div>
+                </div>
+                <div class="am-u-sm-12" style="height: auto;">
+                <div class="am-u-sm-4">
+                <label for="lat">视频:</label>
+                </div>
+                <div class="am-u-sm-8">
+                <img id="logo" class="ctn-uploadImg" src="" draggable="false">
+                <div id="licenseBox" class="ctn-licence">
+                    <input type="file" name="photo2" id="photo2" value="" placeholder="照片">
+                </div> 
+                <input type="hidden" name="video" id="video"> 
+                </div>
+                <div class="am-u-md-5" style="margin: 5px;">
+                    <video  id="jingqingaddvideo"  width="150" height="100" controls>
+                      <source id="video_path" src="" type="video/mp4" />
+                      <embed width="320" height="240" src="/i/movie.swf" />
+                    您的浏览器不支持Video标签。
+                    </video>
+                </div>
+                </div>  -->
+                <div class="am-cf" style="margin: 20px;height: auto;">
+                  <button onclick="addjingqing()" class="am-btn am-btn-block am-btn-success am-btn-sm am-fl">增 加</button>
+                </div> 
+            </div>
+          </div>
+        </div>
+        <!-- 增加记录 -->
+        <!-- 个人信息 -->
+        <div class="am-panel am-panel-default xuanfuzhong" style="height: 300px;position: absolute;float: left;z-index: 9999;font-size: 8px;display: none;" id="userinfo">
+          <div class="am-panel-hd am-cf"  style="background-color: #3368C4;color: white;height: auto;" >个人信息<span class="am-icon-close am-fr" onclick="userinfoHide()" ></span></div>
+          <div class="am-panel-bd " style="padding: 0px;height: 400px">
+            <div class="am-panel am-panel-default" style="height: 100%">
+              <div class="am-panel-bd">
+                <div class="am-g">
+                  <div class="am-u-md-6"  style="height: 100px;width: 100px;">
+                    <img id="userinfoimg" width="100px" height="100px" class="am-img-circle am-img-thumbnail"/>
+                  </div>
+                  <div class="am-u-md-6" style="height: auto;">
+                    <p><span id="userinfoname">王先生</span><a href="#">(<span id="userinfotype"></span>)</a></p>
+                    <p>状态：<span id="userinfoonline">在线</span></p>
+                    <p>认证：<span id="userinfoauth">已认证</span></p>
+                  </div>
+                  <p>电话：<span id="userinfophone">15234567890</span></p>
+                    <p>单位：<span id="userinfoorganname1">和西派出所</span>-><span id="userinfoorganname2">人事部</span></p>
+                    
+                    <p>驻地：<span id="userinfoplace">小楼区</span></p><hr>
+                    <button type="button" onclick="userinfoHide()" class="am-btn am-btn-primary am-btn-xs">关闭</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 个人信息 -->
+        <!-- 警情详情 -->
+        <div class="am-panel am-panel-default xuanfujingqing" id="jingqinginfo" style="width:400px; position: absolute;float: left;width: 500px;z-index: 9999;display: none;height: auto;font-size: 8px;">
+          <div class="am-panel-hd am-cf"  style="background-color: #3368C4;color: white;height: auto;" >警情详情<span class="am-icon-close am-fr" onclick="jingqinginfoHide()" ></span></div>
+          <div class="am-panel-bd " style="padding: 0px;">
+            <div class="am-panel am-panel-default" style="height: 100%">
+              <div class="am-panel-bd">
+                <div class="am-g">
+                  <div class="am-u-md-6" style="margin: 5px;">
+                    <p style="margin: 5px;">报警时间：<span id="jingqinginfotime">2021-12-16 08：00：00</span></p>
+                    <p style="margin: 5px;">发布人：<span id="jingqinginfoname">王先生</span></p>
+                    <p style="margin: 5px;">辖区：<span id="jingqinginfopaichusuo"></span></p>
+                    <p style="margin: 5px;">案发地点：<span></span></p>
+                    <textarea style="width: 100%;" rows="3"  id="jingqinginfoaddress">温州市乐清市哒哒哒街呃呃呃号</textarea>
+                    <p style="margin: 5px;">警情内容：</p>
+                    <textarea style="width: 100%;" rows="4" id="jingqinginfocontent"></textarea>
+                    <p style="margin: 5px;">类型：<span id="jingqinginfotype4">失物类</span></p>
+                    <p style="margin: 5px;">状态：<span id="jingqinginfostate">未下达</span></p>
+                  </div>
+                  <div class="am-u-md-5" style="margin: 5px;">
+                    <a id="jingqinginfoimagea" target="_blank" href=""><img id="jingqinginfoimage" data-tips-image style="width: 150px;height: 100px;"></a>
+                    <a id="jingqinginfovideoa" target="_blank" href="">
+                      <video  id="jingqinginfovideo"  width="150" height="100" controls>
+                      <source id="video_path" src="" type="video/mp4" />
+    <!--  <source src="/i/movie.webm" type="video/webm" />
+     <object data="/i/movie.mp4" width="320" height="240"> -->
+     <embed width="320" height="240" src="/i/movie.swf" />
+                      <!-- <source src="/Uploads/2021-12-12/2021-12-12-18-12-58863.mp4" type="video/mp4"> -->
+                    您的浏览器不支持Video标签。
+                    </video></a>
+                  </div>
+                  <div class="am-u-md-12" style="margin: 5px;">  
+                    <p style="margin: 5px;">接收人：</p>
+                    <div class="am-u-md-4">
+                      <select  id="jingqingorganname1">
+                        <option value=" ">一级单位</option>
+                        {volist name="organlist" id="vo"}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/volist}
+                      </select>
+                    </div>
+                    <div class="am-u-md-4">                      
+                      <select  id="jingqingorganname2">
+                        <option value="">二级单位</option>
+                        <volist name="organname2" id="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        </volist>
+                      </select>
+                    </div>
+                    <div class="am-u-md-4">
+                      <select id="jingqingusers">
+                      </select>
+                    </div>
+                    <div class="am-u-md-12" style="padding: 5px;">
+                      <button type="button" onclick="addPaisongUser()" class="am-btn am-btn-primary am-btn-xs">添加个人</button>
+                      <button type="button" onclick="addPaisongOrgan()" class="am-btn am-btn-success am-btn-xs">添加部门</button>
+                      <button type="button" onclick="clearPaisongUser()" class="am-btn am-btn-danger am-btn-xs">全部清空</button>
+                      <button type="button" onclick="drawRectangle()" class="am-btn am-btn-default am-btn-xs">地图框选</button>
+                    </div>
+                    <div  class="am-u-md-12" style="width: 100%;height: 100px;overflow-y: scroll;padding: 2px;"  >
+                      <div  class="am-u-md-12" style="width: 100%;padding: 2px;"  id="selectedusers"></div>
+                    </div>
+                    <!-- <textarea style="width: 100%;" rows="4" id="selectedusers"></textarea> -->
+                    <div class="am-u-md-12" style="padding: 5px;">
+                      <button type="button" onclick="paisong()" class="am-btn am-btn-primary am-btn-xs">派 送</button>
+                      <button type="button" onclick="jingqinginfoHide()" class="am-btn am-btn-success am-btn-xs">关 闭</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 警情详情 -->
+       
+        <div id="admin_id">{$admin_id['id']}</div>
+       
+      </div>
+    </div>
+  </div>
+  <!-- footer start -->
+<!--     <include file="/footer" />
+-->    <!-- footer end -->
+  
+
+</div>
+<!-- content end -->
+
+<!-- 照片上传 -->
+<script type="text/javascript">  
+var uploading = false; 
+$("#photo").on("change", function(){
+  console.log("change");
+    if(uploading){
+        alert("文件正在上传中，请稍候");
+        return false;
+    }
+    var formData = new FormData();
+    formData.append("file",$("#photo")[0].files[0]);
+    console.log(formData);
+    $.ajax({
+        url: "/Manage.php/ajax/upload",
+        type: 'POST',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType:"json",
+        beforeSend: function(){
+            uploading = true;
+        },
+        success : function(data) {
+          console.log(data);
+          if(data['code']==1){
+            $("#image").val(data['data']['fullurl']);  
+          }
+          console.log(data['data']['fullurl']);
+            uploading = false;
+            $("#imagediv" ).height(200);
+            $("#jingqingaddimage").attr("src",data['data']['fullurl']);
+            $("#jingqingaddimage").show();  
+        },
+        error: function(data) {
+          alert("失败");
+           console.log(data);
+            uploading = false;
+        }
+    });
+});
+$("#photo2").on("change", function(){
+  console.log("change");
+    if(uploading){
+        alert("文件正在上传中，请稍候");
+        return false;
+    }
+    var formData = new FormData();
+    formData.append("file",$("#photo2")[0].files[0]);
+    console.log(formData);
+    $.ajax({
+        url: "/Manage.php/ajax/upload",
+        type: 'POST',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType:"json",
+        beforeSend: function(){
+            uploading = true;
+        },
+        success : function(data) {
+          console.log(data);
+          if(data['code']==1){
+             $("#videodiv" ).height(200);
+            $("#jingqingaddvideo").show();  
+            $("#video").val(data['data']['fullurl']); 
+             var videoSrc = data['data']['fullurl'];//新的视频播放地址
+   document.getElementById("jingqingaddvideo").src=videoSrc ;
+   document.getElementById("jingqingaddvideo").play();
+  clearPaisongUser();
+          }
+          console.log(data['data']['msg']+"--");
+            uploading = false;
+        },
+        error: function(data) {
+           console.log(data);
+            uploading = false;
+        }
+    });
+});
+</script>
+
+  
+  <script type="text/javascript">
+    //添加编辑弹出层
+    function updatePwd(title, id) {
+      $.jq_Panel({
+        title: title,
+        iframeWidth: 500,
+        iframeHeight: 300,
+        url: "updatePwd.html"
+      });
+    }
+  </script>
+  <script src="/js/layui.js"></script>
+  <script>
+    //JavaScript代码区域
+    layui.use('element', function() {
+      var element = layui.element;
+
+    });
+  </script>
+<!--   <style type="text/css">
+    /*使图片在浏览器中居中显示*/
+.bigImg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+ /*图片向左移动自身宽度的50%, 向上移动自身高度的50%。*/
+    transform: translate(-50%,-50%);
+}
+/*遮罩层*/
+  .opacityBottom {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: rgba(0,0,0,0.8);
+        
+        z-index: 1000;
+        top: 0;
+        left: 0;
+    }
+  </style> -->
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.MouseTool,AMap.Geocoder"></script>
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<!--   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=23620e39626c542efb8da94b603d3dd1&plugin=AMap.Walking"></script> -->
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>  
+<script type="text/javascript">
+  var jingqings = [];
+var users = [];
+var selectedusers = [];//选中的人员id列表
+var selectedUserDic = new Array();//选中的人员字典
+var peopleShow = 1;
+var markers = [];
+var currentjingqing = -1;//当前选中的警情id
+
+
+
+//构建自定义信息窗体
+function createInfoWindow(title, content) {
+    var info = document.createElement("div");
+    info.className = "custom-info input-card content-window-card";
+
+    //可以通过下面的方式修改自定义窗体的宽高
+    //info.style.width = "400px";
+    // 定义顶部标题
+    var top = document.createElement("div");
+    var titleD = document.createElement("div");
+    var closeX = document.createElement("img");
+    top.className = "info-top";
+    titleD.innerHTML = title;
+    closeX.src = "https://webapi.amap.com/images/close2.gif";
+    closeX.onclick = closeInfoWindow;
+
+    top.appendChild(titleD);
+    top.appendChild(closeX);
+    info.appendChild(top);
+
+    // 定义中部内容
+    var middle = document.createElement("div");
+    middle.className = "info-middle";
+    middle.style.backgroundColor = 'white';
+    middle.innerHTML = content;
+    info.appendChild(middle);
+
+    // 定义底部内容
+    var bottom = document.createElement("div");
+    bottom.className = "info-bottom";
+    bottom.style.position = 'relative';
+    bottom.style.top = '0px';
+    bottom.style.margin = '0 auto';
+    var sharp = document.createElement("img");
+    sharp.src = "https://webapi.amap.com/images/sharp.png";
+    bottom.appendChild(sharp);
+    info.appendChild(bottom);
+    return info;
+}
+
+//关闭信息窗体
+function closeInfoWindow() {
+    map.clearInfoWindow();
+}
+// var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+
+// $('img').click(function () {
+//     //获取图片路径
+//     var imgsrc = $(this).attr("src");
+//     console.log(imgsrc);
+//     var opacityBottom = '<div class="opacityBottom" style = "display:none"><img class="bigImg" src="' + imgsrc + '"></div>';
+//     $(document.body).append(opacityBottom);
+//     toBigImg();//变大函数
+
+// });
+
+// function toBigImg() {
+//     $(".opacityBottom").addClass("opacityBottom");//添加遮罩层
+//     $(".opacityBottom").show();
+//     $("html,body").addClass("none-scroll");//下层不可滑动
+//     $(".bigImg").addClass("bigImg");//添加图片样式
+//     $(".opacityBottom").click(function () {//点击关闭
+//         $("html,body").removeClass("none-scroll");
+//         $(".opacityBottom").remove();
+//     });
+//     }
+
+//地图初始化
+var map = new AMap.Map("container", {
+  resizeEnable: true,
+  center: [120.986678, 28.112493],//地图中心点
+  zoom: 13 //地图显示的缩放级别
+}); 
+var mouseTool = new AMap.MouseTool(map);
+map.on("moveend",getbounds);
+map.clearMap( );  
+  getPeople();  
+  getJingqing();
+function hello(){
+  map.clearMap( );  
+  getPeople();  
+  getJingqing();
+  
+
+}
+// hello();
+var t1 = window.setInterval(hello,10000);
+
+map.on('click',function(e){
+  console.log(e.lnglat);
+  document.getElementById('lng').value=e.lnglat.lng;
+  document.getElementById('lat').value=e.lnglat.lat;
+  regeoCode(e.lnglat);
+    // document.getElementById('coordinate').value = e.lnglat;
+    // regeoCode();
+})  ;
+var geocoder = new AMap.Geocoder({
+    city: "0577", //城市设为北京，默认：“全国”
+    radius: 1000 //范围，默认：300
+});
+var marker = new AMap.Marker();;
+function regeoCode(lnglat) {    
+    geocoder.getAddress(lnglat, function(status, result) {
+        if (status === 'complete'&&result.regeocode) {
+            var address = result.regeocode.formattedAddress;
+            // alert(address);
+            document.getElementById('address').value=address;
+        }else{
+            log.error('根据经纬度查询地址失败')
+        }
+    });
+}
+//地图框选
+function drawRectangle () {
+  $("#jingqinginfo").hide();
+    mouseTool.rectangle({
+      strokeColor:'gray',
+      strokeOpacity:0.5,
+      strokeWeight: 1,
+      fillColor:'gray',
+      fillOpacity:0.5,
+      // strokeStyle还支持 solid
+      strokeStyle: 'solid',
+      // strokeDasharray: [30,10],
+    })
+     
+   
+}
+mouseTool.on('draw', function(event) {
+  console.log("框选"+event.obj.getBounds().northeast+"-"+event.obj.getBounds().southwest);
+  setTimeout(function (){
+    getKuangPeople(event.obj);
+  }, 30);
+  setTimeout(function (){
+    mouseTool.close(true);;
+  }, 300);
+  $("#jingqinginfo").show();
+  //log.info('覆盖物对象绘制完成');
+})
+
+//获取框选的人员
+function getKuangPeople(ask){
+  
+  type = $("#usertype").val();
+  organname1 = $("#organname1").val();
+  organname2 = $("#organname2").val();
+  usermapin = true;
+  isonline = false;
+  lngmin = ask.getBounds().getSouthWest( ).getLng( );
+  latmin = ask.getBounds().getSouthWest( ).getLat( );
+  lngmax = ask.getBounds().getNorthEast( ).getLng( );
+  latmax = ask.getBounds().getNorthEast( ).getLat( );
+
+  url = "/Api/User/Realname?lngmin="+lngmin+"&latmin="+latmin+"&lngmax="+lngmax+"&latmax="+latmax
+  +"&group_id="+type+"&organname1="+organname1+"&organname2="+organname2+"&realname="+realname
+  +"&mapin="+usermapin+"&isonline="+isonline;
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+
+      for (var i = 0;i<result.length;i++) {
+        value = result[i];
+        selectedUserDic[value['id']]=value['nickname'];
+      }
+      showSelectedUser(); 
+    });
+}
+//根据jingqingid获取派送列表
+function getPaisong(jingqingid){  
+  url = "/Api/Paisong/Jingqing?jingqingid="+jingqingid;
+    console.log(url);
+    $.get(url, function(result){
+      console.log(result);
+      for (var i = 0;i<result.length;i++) {
+        value = result[i];
+        selectedUserDic[value['user']['id']]=value['user']['nickname'];
+      }
+      showSelectedUser(); 
+    });
+}
+//用户marker点击
+function markerUserClick(e) {
+  currente = e;
+  infoWindowShow = 1;
+  console.log(e.target.content);
+  if(e.target.content.status == 'hidden'){
+    online="离线"
+  }else{
+    online="在线"
+  }
+  //实例化信息窗体
+  var title = e.target.content.nickname+'<span style="font-size:11px;color:#F00;">'+online+'</span>',
+      content = [];
+  content.push("<img style='margin-right:30px;' height=100 width=100 src='"+e.target.content.avatar+"'>单位:"+e.target.content.organ.name);
+  content.push("部门:"+e.target.content.depart.name);
+  content.push("电话："+e.target.content.mobile);
+  content.push("<br><br><br>");
+  var infoWindow = new AMap.InfoWindow({
+      isCustom: true,  //使用自定义窗体
+      content: createInfoWindow(title, content.join("<br/>")),
+      // offset: new AMap.Pixel(16, -45)
+  });
+  // userinfoShow(e.target.content);
+  infoWindow.open(map, map.getCenter());
+  // infoWindow.setContent(e.target.content);
+  // infoWindow.open(map, e.target.getPosition());
+}
+//警情marker点击
+function markerJingqingClick(e) {
+  console.log(e.target.content);
+  currentjingqing = e.target.content;
+  jingqinginfoShow(e.target.content);
+}
+
+function selectall(){
+    $("tr input[type=checkbox]").prop("checked","checked");
+  }
+  function unselectall(){
+    $("tr input[type=checkbox]").removeAttr("checked");
+  }
+//增加警情
+function addjingqing(){
+  if($("#lng").val()>117 && $("#lng").val()<125&&$("#lat").val()>27&&$("#lat").val()<33){
+
+  }else{
+    alert("请选择正确位置");
+    return;
+  }
+  var url = "/Api/Jingqing/Add?"
+  +"&title="+$("#title").val()
+  +"&content="+$("#c-content").val()
+  +"&address="+$("#address").val()
+  +"&type1="+$("#type1").val()
+  +"&type2="+$("#type2").val()
+  +"&type3="+$("#type3").val()
+  +"&image="+$("#image").val()
+  +"&video="+$("#video").val()
+  +"&lng="+$("#lng").val()
+  +"&lat="+$("#lat").val()
+  +"&admin_id="+$("#admin_id").text()
+  +"&paichusuo="+$("#paichusuo").val();
+  console.log(url);
+  $.get(url, function(result){
+      console.log(result);
+      currentjingqing = -1;
+      // $("#title").text("标题：");
+      // $("#content").text("内容：");
+      alert(result.msg);
+      log.info(result.msg);
+      if(result.status==1){
+          getJingqingClear();
+          $("#jingqingaddpanel").hide();
+      }
+      // getJingqingClear();
+      // alert("派送完成！");
+  });
+}
+
+//派送
+function paisong(){
+  // if(currentjingqing<0){
+  //   alert("请选择警情");
+  //   return;
+  // }
+  var userids = "";
+  console.log(selectedUserDic);
+  for (var key in selectedUserDic) {
+  　　var item = selectedUserDic[key];
+    userids += key+",";
+  }
+
+  var url = "/Api/Paisong/Add?"
+  +"&jingqing_id="+currentjingqing['id']
+  +"&userids="+userids;
+  console.log(url);
+  $.get(url, function(result){
+      console.log(result);
+      // currentjingqing = -1;
+      alert(result.msg);
+      log.info(result.msg);
+      if(result.status==1){
+          $("#jingqinginfo").hide();
+      }
+      // $("#title").text("标题：");
+      // $("#content").text("内容：");
+      log.info(result.msg);
+  });
+}
+
+
+// function checkjingqing(){
+//   people = 0;
+//   map.clearMap( ); 
+
+//   $('#jigouselect').attr("disabled",true);
+// }
+// function checkuser(){
+//   peopleShow = 1;
+  
+//   getPeople();
+//   $('#jigouselect').attr("disabled",false);
+// }
+//$("#container").height($("#container").width()/2);
+
+
+function jingqingToggle(){
+  $("#jingqingliebiao").toggle();
+}
+function peopleToggle(){
+  $("#userliebiao").toggle();
+}
+function getJingqingClear(){  
+  
+  map.clearMap();
+  showMapUser();
+  getJingqing();
+}
+function getPeopleClear(){
+  map.clearMap();
+  showMapJingqing();
+  getPeople();
+}
+//查询警情
+function getJingqing(){    
+  // $("#peoplecheck").text("选择人员");
+  // $("#th1").text("标题");
+  // $("#th2").text("内容");
+  lngmin = map.getBounds().getSouthWest( ).getLng( );
+  latmin = map.getBounds().getSouthWest( ).getLat( );
+  lngmax = map.getBounds().getNorthEast( ).getLng( );
+  latmax = map.getBounds().getNorthEast( ).getLat( );
+  type1 = $("#jingqingtype1").val();
+  title = $("#jingqingtitle").val();
+  mapin = $("#jingqingmapin").is(':checked');
+
+  url = "/Api/Jingqing/Index?lngmin="+lngmin+"&latmin="+latmin+"&lngmax="+lngmax+"&latmax="+latmax
+  +"&type1="+type1+"&title="+title+"&mapin="+mapin;
+  console.log(url);
+  $.get(url, function(result){
+    console.log(result);
+    jingqings = result;
+    //map.clearMap( );
+    showListJingqing();
+    showMapJingqing();
+    // showMapUser();
+    // showListUser();
+  });
+}
+//把时间戳转为为普通日期格式
+function getLocalTime(nS) {     
+   return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');     
+}
+
+//列表显示警情
+function showListJingqing(){
+  result=jingqings;
+  $("#jingqinglist").empty();
+  for (var i = 0;i<result.length;i++) {
+    var value = result[i];
+    $("#jingqinglist").append("<tr onclick='jingqingclick("+i+")'><td>"+value.title+"</td><td>"+value.address+"</td><td>"+getLocalTime(value.createtime)+"</td></tr>");
+    //console.log(value);<td><a href ='/Home/Jingqing/Edit?id="+value.id+"'>详情</a></td>
+  } 
+}
+//地图显示警情
+function showMapJingqing(){
+  result=jingqings;
+  
+  for (var i = 0;i<result.length;i++) {
+    var value = result[i];
+    if(value['type1']=="警情联动"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/event.png',  // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }else{
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/event1.png',  // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    var marker = new AMap.Marker({
+      position: [value.lng, value.lat],
+      title: value.title,
+      icon:icon
+    });
+    //给marker添加点击事件
+    marker.content=value;
+    marker.on('click', markerJingqingClick);
+    map.add(marker);
+    marker.setLabel({
+      offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+      content: value.title, //设置文本标注内容
+      direction: 'bottom' //设置文本标注方位
+    });
+    markers.push(marker);
+  } 
+   //  $("#title").text(jingqings[0]['title']);
+   // $("#content").text(jingqings[0]['content']);   
+   
+}
+
+
+
+
+//查询人员
+function getPeople(){
+  lngmin = map.getBounds().getSouthWest( ).getLng( );
+  latmin = map.getBounds().getSouthWest( ).getLat( );
+  lngmax = map.getBounds().getNorthEast( ).getLng( );
+  latmax = map.getBounds().getNorthEast( ).getLat( );
+  type = $("#usertype").val();
+  organname1 = $("#organname1").val();
+  organname2 = $("#organname2").val();
+  realname = $("#realname").val();
+  usermapin = $("#usermapin").is(':checked');
+  isonline = $("#isonline").is(':checked');
+
+  url = "/Api/User/Realname?lngmin="+lngmin+"&latmin="+latmin+"&lngmax="+lngmax+"&latmax="+latmax
+  +"&group_id="+type+"&organname1="+organname1+"&organname2="+organname2+"&realname="+realname
+  +"&mapin="+usermapin+"&isonline="+isonline;
+  console.log(url);
+  $.get(url, function(result){
+    console.log(result);
+    users = result;
+    //map.clearMap( );
+    showMapUser();
+    showListUser(); 
+    // showListJingqing();
+    // showMapJingqing();    
+  });
+}
+
+//地图上显示人员
+function showMapUser(){
+  userlist = users;
+  for (var i = 0;i<userlist.length;i++) {
+    var value = userlist[i];
+    var online = "offline";
+    if(value.state =="执勤")online = "online";
+    //console.log(value);
+    // 创建 AMap.Icon 实例：
+    if(value.group_id == "1"&&value.status=="hidden"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/jingcha1.png',  // Icon的图像
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    if(value.group_id == "1"&&value.status=="normal"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/jingcha.png',  // Icon的图像
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    if(value.group_id == "2"&&value.status=="hidden"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/baoan1.png',  // Icon的图像
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+    if(value.group_id == "2"&&value.status=="normal"){
+      var icon = new AMap.Icon({
+        size: new AMap.Size(30, 30),    // 图标尺寸
+        image: '/img/baoan.png',  // Icon的图像
+        imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+      });
+    }
+
+    var marker = new AMap.Marker({
+      position: [value.lng, value.lat],
+      offset: new AMap.Pixel(-10, -10),
+      title: value.nickname,
+      icon: icon
+    });
+    marker.content=value;
+    // marker.setLabel({
+    //   offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+    //   content: value.nickname, //设置文本标注内容
+    //   direction: 'bottom' //设置文本标注方位
+    // });
+    marker.on('click', markerUserClick);
+    //marker.emit('click', {target: marker});
+    // infoWindow.close();
+    //console.log(value);
+    map.add(marker);
+    // marker.setLabel({
+    //   offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+    //   content: value.name,
+    //   direction: 'bottom' //设置文本标注方位
+    // });          
+  } 
+}
+//列表上显示人员
+function showListUser(){
+  userlist = users;
+  $("#userlist").empty();
+  for (var i = 0;i<userlist.length;i++) {
+    var value = userlist[i];
+    var online = "离线";
+    if(value.status =="normal")online = "在线";
+    $("#userlist").append("<tr class='"+online+"' onclick='userclick("+i+")'><td><input disabled=true type='checkbox' /></td><td>"+value.nickname+"</td><td>"+value.group.name+"</td><td>"+online+"</td></tr>");
+    //console.log(value);          
+  } 
+}
+
+// function getJigou(name){
+//   map.clearMap( );
+//   //console.log("/Api/User/Jigou?name="+$('#jigouselect').val());
+//   $.get("/Api/User/Jigou?name="+name, function(result){
+//     users = result;
+//     $("#userlist").empty();
+//     selectedusers = [];
+//     for (var i = 0;i<result.length;i++) {
+//       var value = result[i];
+//       // console.log(value.lat);
+//       // 创建 AMap.Icon 实例：
+//       var online = "offline";
+//       if(value.state =="执勤")online = "online";
+//         $("#userlist").append("<tr class='"+online+"'  onclick='userclick("+i+")'><td><input disabled=true type='checkbox' /></td><td>"+value.name+"</td><td>"+value.type+"</td><td></td></tr>");
+//       if(value.type == "警察"){
+//         var icon = new AMap.Icon({
+//           size: new AMap.Size(30, 30),    // 图标尺寸
+//           image: '/img/jingcha.png',  // Icon的图像
+//           // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+//           imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+//         });
+//         var marker = new AMap.Marker({
+//           position: [value.lng, value.lat],
+//           offset: new AMap.Pixel(-10, -10),
+//           title: value.name,
+//           icon: icon
+//         });
+//         // console.log(icon);
+//         map.add(marker);
+//         marker.content=value.name+"<br>"+value.type+"<br>单位："+value.organname+"<br>驻派地："+value.place+"<br>电话："+value.phone;
+//           marker.on('click', markerClick2);
+//           //marker.emit('click', {target: marker});
+//           infoWindow.close();
+//        marker.setLabel({
+//           offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+//           content: value.name,
+//           direction: 'bottom' //设置文本标注方位
+//         });
+       
+//       }
+//       if(value.type == "保安"){
+//         var icon = new AMap.Icon({
+//           size: new AMap.Size(30, 30),    // 图标尺寸
+//           image: '/img/baoan.png',  // Icon的图像
+//           // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+//           imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+//         });
+//         var marker = new AMap.Marker({
+//           position: [value.lng, value.lat],
+//           offset: new AMap.Pixel(-10, -10),
+//           title: value.name,
+//           icon: icon
+//         });
+//         // console.log(icon);
+//         map.add(marker);
+//         marker.content=value.name+"<br>"+value.type+"<br>单位："+value.organname+"<br>驻派地："+value.place+"<br>电话："+value.phone;
+//           marker.on('click', markerClick2);
+//           //marker.emit('click', {target: marker});
+//           infoWindow.close();
+//         infoWindow.close();
+//         marker.setLabel({
+//           offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+//           content: value.name,
+//           direction: 'bottom' //设置文本标注方位
+//         });
+       
+//       }
+      
+      
+//     }     
+//   });
+// }
+
+//   //marker点击事件
+//  function markerClick(e) {
+//   currentjingqing = jingqings[e.target.getTitle()]['id'];
+//   console.log(currentjingqing);
+//   $("#title").text("标题："+jingqings[e.target.getTitle()]['title']);
+//   $("#content").text("内容："+jingqings[e.target.getTitle()]['content']);
+//   var lng = jingqings[e.target.getTitle()]['lng']; //经度范围[121.138398, 121.728226]
+//   var lat = jingqings[e.target.getTitle()]['lat']; //纬度范围[30.972688, 31.487611]
+//   map.setCenter([lng, lat]); //设置地图中心点
+//   map.setZoom(15); //设置地图层级
+// } 
+function jingqingclick(i){
+  currentjingqing = jingqings[i]['id'];
+  console.log(currentjingqing);
+    $("#title").text("标题："+jingqings[i]['title']);
+  $("#c-content").text("内容："+jingqings[i]['content']);
+  var lng = jingqings[i]['lng']; //经度范围[121.138398, 121.728226]
+  var lat = jingqings[i]['lat']; //纬度范围[30.972688, 31.487611]
+  map.setCenter([lng, lat]); //设置地图中心点
+  map.setZoom(15); //设置地图层级
+}  
+function userclick(i){
+  currenuser = users[i]['id'];
+  console.log(currenuser);
+  //   $("#title").text("标题："+jingqings[i]['title']);
+  // $("#content").text("内容："+jingqings[i]['content']);
+  var lng = users[i]['lng']; //经度范围[121.138398, 121.728226]
+  var lat = users[i]['lat']; //纬度范围[30.972688, 31.487611]
+  map.setCenter([lng, lat]); //设置地图中心点
+  map.setZoom(15); //设置地图层级
+  // Array.prototype.remove = function(val) { 
+  //   var index = this.indexOf(val); 
+  //   if (index > -1) { 
+  //     this.splice(index, 1); 
+  //   } 
+  // };
+  // console.log(i);
+  // //alert("11");
+  // //console.log($("#userlist tr").eq(i).find('input').prop("checked"));
+  // if ($("#userlist tr").eq(i).find('input').prop("checked")) {
+  //     $("#userlist tr").eq(i).find('input').prop("checked", false);
+  //     selectedusers.remove(i);
+  // } else {
+    
+  //     $("#userlist tr").eq(i).find('input').prop("checked", 'checked');
+  //     //console.log($("#userlist tr").eq(i).find('input').prop("checked"));
+  //     selectedusers.push(i);
+  // }
+  // console.log(selectedusers);
+  // var usernames = "";
+  // for (j=0;j<selectedusers.length;j++) {
+  //     usernames += users[selectedusers[j]]['name']+",";
+  // }
+  // // console.log(selectedusers);
+  // // console.log(usernames);
+  // $("#usernames").val(usernames);
+}  
+//map.on("zoomend",getbounds);
+
+
+function getbounds(e){
+if($('#jigouselect').val()=="all"){
+    map.clearMap( );
+    getPeople();
+  }
+//console.log(map.getBounds().toString());
+// if(peopleShow == 1){
+  
+//   if($('#jigouselect').val()=="all"){
+//     map.clearMap( );
+//     getPeople();
+//   }
+  
+// }else{
+//   map.clearMap( );
+//   getJingqing();
+// }
+}
+$(document).ready(function(){
+$("#jigouselect").change(function(){
+  if($('#jigouselect').val()=="all"){
+    getPeople();
+  }else{
+    getJigou($('#jigouselect').val());
+  }
+  //alert($('#jigouselect').val());
+  
+});
+});
+
+// //搜索用户
+//   function search(){
+//     if($("#dituxuanren").prop("checked")){
+//       lngmin = map.getBounds().getSouthWest( ).getLng( );
+//       latmin = map.getBounds().getSouthWest( ).getLat( );
+//       lngmax = map.getBounds().getNorthEast( ).getLng( );
+//       latmax = map.getBounds().getNorthEast( ).getLat( );
+//     }
+
+//     usertype = $("#usertype").val();
+//     realname = $("#realname").val();
+//     organname1 = $("#organname1").val();
+//     organname2 = $("#organname2").val();
+//     var url = "/Api/User/Realname?usertype="+usertype+"&realname="+realname+"&organname1="+organname1+"&organname2="+organname2;
+//     console.log(url);
+//     $.get(url, function(result){
+//       users = result;
+//       console.log(result);
+//       map.clearMap( );
+//       showMapUser(result);  
+
+    
+//     });
+//   }
+
+  // //表格和地图显示用户
+  // function showMapUser(result){
+  //   $("#userlist").empty();
+  //   for (var i = 0;i<result.length;i++) {
+  //     var value = result[i];
+  //     var online = "offline";
+  //     if(value.state =="执勤")online = "online";
+  //       $("#userlist").append("<tr class='"+online+"' onclick='userclick("+i+")'><td><input disabled=true type='checkbox' /></td><td>"+value.name+"</td><td>"+value.type+"</td><td>"+value.signtime+"</td></tr>");
+  //       console.log(value.lat);
+  //       // 创建 AMap.Icon 实例：
+  //       if(value.type == "警察"){
+  //         var icon = new AMap.Icon({
+  //           size: new AMap.Size(30, 30),    // 图标尺寸
+  //           image: '/img/jingcha.png',  // Icon的图像
+  //           // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+  //           imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+  //         });
+  //       }else{
+  //         var icon = new AMap.Icon({
+  //           size: new AMap.Size(30, 30),    // 图标尺寸
+  //           image: '/img/baoan.png',  // Icon的图像
+  //           // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+  //           imageSize: new AMap.Size(30, 30)   // 根据所设置的大小拉伸或压缩图片
+  //         });
+  //       }
+  //         var marker = new AMap.Marker({
+  //           position: [value.lng, value.lat],
+  //           offset: new AMap.Pixel(-10, -10),
+  //           title: value.name,
+  //           icon: icon
+  //         });
+  //         marker.content=value.name+"<br>"+value.type+"<br>单位："+value.organname+"<br>驻派地："+value.place+"<br>电话："+value.phone;
+  //         marker.on('click', markerClick);
+  //         //marker.emit('click', {target: marker});
+  //         infoWindow.close();
+  //         console.log(value);
+  //         map.add(marker);
+  //         marker.setLabel({
+  //           offset: new AMap.Pixel(0, 0),  //设置文本标注偏移量
+  //           content: value.name,
+  //           direction: 'bottom' //设置文本标注方位
+  //         });          
+  //     } 
+
+  // }
+</script> 
